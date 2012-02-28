@@ -1,5 +1,6 @@
-1. Introducción
-===============
+1. Introducción 
+=============== 
+
 La aplicación Evaluación permitirá generar los informes de evaluación que se emiten al finalizar cada trimestre por cada materia indicando la calificación de los indicadores evaluados a un alumno en cada evaluación por cada materia. La evaluación de los indicadores permitirá calcular la calificación final del trimestre para cada materia de acuerdo al método explicitado en las 
 programaciones.
 
