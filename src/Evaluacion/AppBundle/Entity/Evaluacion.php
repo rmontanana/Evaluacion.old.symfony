@@ -1,7 +1,7 @@
 <?php
 /* ***************************************************************************
- * AppBundle/Entity/Grupo.php
- * Entidad Grupo 
+ * AppBundle/Entity/Evaluacion
+ * Entidad Evaluacion
  * (C) Copyright 2012 Ricardo Montañana <rmontanana@gmail.com>
  * This file is part of Evaluacion.
  * ***************************************************************************
@@ -25,12 +25,12 @@ namespace Evaluacion\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Evaluacion\AppBundle\Entity\Grupo
+ * Evaluacion\AppBundle\Entity\Evaluacion
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Grupo
+class Evaluacion
 {
     /**
      * @var integer $id
@@ -49,11 +49,12 @@ class Grupo
     private $descripcion;
 
     /**
-     * @var string $nivel
+     * @var date $fecha
      *
-     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Nivel") 
+     * @ORM\Column(name="fecha", type="date")
      */
-    private $nivel;
+    private $fecha;
+
 
     /**
      * Get id
@@ -84,28 +85,29 @@ class Grupo
     {
         return $this->descripcion;
     }
-    
+
     /**
-     * Establece el nivel
+     * Set fecha
      *
-     * @param type \Evaluacion\AppBundle\Entity\Nivel
+     * @param date $fecha
      */
-    public function setNivel( $nivel)
+    public function setFecha($fecha)
     {
-        $this->nivel = $nivel;
+        $this->fecha = $fecha;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return date 
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
     }
     
     /**
-     * Devuelve el nivel
-     * @return type \Evaluacion\AppBundle\Entity\Nivel
-     */
-    public function getNivel ()
-    {
-        return $this->nivel;
-    }
-    
-    /**
-     * Devuelve la representación del nivel
+     * Devuelve la imagen de una Evaluación
      * @return string
      */
     public function __toString()

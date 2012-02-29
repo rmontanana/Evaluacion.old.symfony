@@ -1,7 +1,7 @@
 <?php
 /* ***************************************************************************
- * AppBundle/Entity/Grupo.php
- * Entidad Grupo 
+ * AppBundle/Entity/Indicador
+ * Entidad Indicador
  * (C) Copyright 2012 Ricardo Montañana <rmontanana@gmail.com>
  * This file is part of Evaluacion.
  * ***************************************************************************
@@ -25,12 +25,12 @@ namespace Evaluacion\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Evaluacion\AppBundle\Entity\Grupo
+ * Evaluacion\AppBundle\Entity\Indicador
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Grupo
+class Indicador
 {
     /**
      * @var integer $id
@@ -42,18 +42,33 @@ class Grupo
     private $id;
 
     /**
-     * @var string $descripcion
+     * @var text $descripcion
      *
-     * @ORM\Column(name="descripcion", type="string", length=45)
+     * @ORM\Column(name="descripcion", type="text")
      */
     private $descripcion;
 
     /**
-     * @var string $nivel
+     * @var boolean $minimo
      *
-     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Nivel") 
+     * @ORM\Column(name="minimo", type="boolean")
      */
-    private $nivel;
+    private $minimo;
+
+    /**
+     * @var text $competencia
+     *
+     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Competencia")
+     */
+    private $competencia;
+
+    /**
+     * @var text $criterioEvaluacion
+     *
+     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\CriterioEvaluacion")
+     */
+    private $criterioEvaluacion;
+
 
     /**
      * Get id
@@ -68,7 +83,7 @@ class Grupo
     /**
      * Set descripcion
      *
-     * @param string $descripcion
+     * @param text $descripcion
      */
     public function setDescripcion($descripcion)
     {
@@ -78,38 +93,80 @@ class Grupo
     /**
      * Get descripcion
      *
-     * @return string 
+     * @return text 
      */
     public function getDescripcion()
     {
         return $this->descripcion;
     }
-    
+
     /**
-     * Establece el nivel
+     * Set minimo
      *
-     * @param type \Evaluacion\AppBundle\Entity\Nivel
+     * @param boolean $minimo
      */
-    public function setNivel( $nivel)
+    public function setMinimo($minimo)
     {
-        $this->nivel = $nivel;
+        $this->minimo = $minimo;
+    }
+
+    /**
+     * Get minimo
+     *
+     * @return boolean 
+     */
+    public function getMinimo()
+    {
+        return $this->minimo;
+    }
+
+    /**
+     * Set competencia
+     *
+     * @param \Evaluacion\AppBundle\Entity\Competencia $competencia
+     */
+    public function setCompetencia(\Evaluacion\AppBundle\Entity\Competencia $competencia)
+    {
+        $this->competencia = $competencia;
+    }
+
+    /**
+     * Get competencia
+     *
+     * @return text 
+     */
+    public function getCompetencia()
+    {
+        return $this->competencia;
+    }
+
+    /**
+     * Set criterioEvaluacion
+     *
+     * @param \Evaluacion\AppBundle\Entity\CriterioEvaluacion $criterioEvaluacion
+     */
+    public function setCriterioEvaluacion(\Evaluacion\AppBundle\Entity\CriterioEvaluacion $criterioEvaluacion)
+    {
+        $this->criterioEvaluacion = $criterioEvaluacion;
+    }
+
+    /**
+     * Get criterioEvaluacion
+     *
+     * @return \Evaluacion\AppBundle\Entity\CriterioEvaluacion 
+     */
+    public function getCriterioEvaluacion()
+    {
+       return $this->criterioEvaluacion;
     }
     
     /**
-     * Devuelve el nivel
-     * @return type \Evaluacion\AppBundle\Entity\Nivel
-     */
-    public function getNivel ()
-    {
-        return $this->nivel;
-    }
-    
-    /**
-     * Devuelve la representación del nivel
-     * @return string
+     * Devuelve la imagen de un Indicador
+     * @return text
      */
     public function __toString()
     {
         return $this->descripcion;
     }
+    
 }

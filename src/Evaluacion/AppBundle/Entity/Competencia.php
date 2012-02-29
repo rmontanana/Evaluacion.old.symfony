@@ -1,7 +1,7 @@
 <?php
-/* ***************************************************************************
- * AppBundle/Entity/Grupo.php
- * Entidad Grupo 
+/* * **************************************************************************
+ * AppBundle/Entity/Competencia
+ * Entidad Competencia
  * (C) Copyright 2012 Ricardo Montañana <rmontanana@gmail.com>
  * This file is part of Evaluacion.
  * ***************************************************************************
@@ -25,12 +25,12 @@ namespace Evaluacion\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Evaluacion\AppBundle\Entity\Grupo
+ * Evaluacion\AppBundle\Entity\Competencia
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Grupo
+class Competencia
 {
     /**
      * @var integer $id
@@ -48,12 +48,6 @@ class Grupo
      */
     private $descripcion;
 
-    /**
-     * @var string $nivel
-     *
-     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Nivel") 
-     */
-    private $nivel;
 
     /**
      * Get id
@@ -86,30 +80,11 @@ class Grupo
     }
     
     /**
-     * Establece el nivel
-     *
-     * @param type \Evaluacion\AppBundle\Entity\Nivel
-     */
-    public function setNivel( $nivel)
-    {
-        $this->nivel = $nivel;
-    }
-    
-    /**
-     * Devuelve el nivel
-     * @return type \Evaluacion\AppBundle\Entity\Nivel
-     */
-    public function getNivel ()
-    {
-        return $this->nivel;
-    }
-    
-    /**
-     * Devuelve la representación del nivel
+     * Devuelve la representación de una competencia
      * @return string
      */
     public function __toString()
     {
-        return $this->descripcion;
+            return $this->descripcion;
     }
 }

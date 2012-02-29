@@ -1,7 +1,7 @@
 <?php
-/* ***************************************************************************
- * AppBundle/Entity/Grupo.php
- * Entidad Grupo 
+/* * **************************************************************************
+ * AppBundle/Entity/CriterioEvaluacion
+ * Entidad CriterioEvaluacion
  * (C) Copyright 2012 Ricardo Montañana <rmontanana@gmail.com>
  * This file is part of Evaluacion.
  * ***************************************************************************
@@ -25,12 +25,12 @@ namespace Evaluacion\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Evaluacion\AppBundle\Entity\Grupo
+ * Evaluacion\AppBundle\Entity\CriterioEvaluacion
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Grupo
+class CriterioEvaluacion
 {
     /**
      * @var integer $id
@@ -44,16 +44,17 @@ class Grupo
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="string", length=45)
+     * @ORM\Column(name="descripcion", type="string", length=100)
      */
     private $descripcion;
 
     /**
-     * @var string $nivel
+     * @var text $materia
      *
-     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Nivel") 
+     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Materia")
      */
-    private $nivel;
+    private $materia;
+
 
     /**
      * Get id
@@ -84,32 +85,34 @@ class Grupo
     {
         return $this->descripcion;
     }
-    
+
     /**
-     * Establece el nivel
+     * Set materia
      *
-     * @param type \Evaluacion\AppBundle\Entity\Nivel
+     * @param \Evaluacion\AppBundle\Entity\Materia $materia
      */
-    public function setNivel( $nivel)
+    public function setMateria(\Evaluacion\AppBundle\Entity\Materia $materia)
     {
-        $this->nivel = $nivel;
+        $this->materia = $materia;
+    }
+
+    /**
+     * Get materia
+     *
+     * @return \Evaluacion\AppBundle\Entity\Materia
+     */
+    public function getMateria()
+    {
+        return $this->materia;
     }
     
     /**
-     * Devuelve el nivel
-     * @return type \Evaluacion\AppBundle\Entity\Nivel
-     */
-    public function getNivel ()
-    {
-        return $this->nivel;
-    }
-    
-    /**
-     * Devuelve la representación del nivel
+     * Devuelve la imagen de un Criterio de Evaluación
      * @return string
      */
     public function __toString()
     {
         return $this->descripcion;
     }
+    
 }
