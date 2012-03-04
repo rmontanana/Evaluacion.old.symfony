@@ -61,3 +61,18 @@
     git=http://github.com/symfony/AsseticBundle.git
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
+
+[doctrine-fixtures]
+    git=http://github.com/doctrine/data-fixtures.git
+
+[DoctrineFixturesBundle]
+    git=http://github.com/symfony/DoctrineFixturesBundle.git
+    target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
+
+[doctrine-extensions]
+    git=https://github.com/beberlei/DoctrineExtensions.git
+
+[IdeupSimplePaginatorBundle]
+    git=https://github.com/javiacei/IdeupSimplePaginatorBundle
+    target=/bundles/Ideup/SimplePaginatorBundle
+
