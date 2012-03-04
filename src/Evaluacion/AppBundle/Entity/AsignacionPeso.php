@@ -52,7 +52,7 @@ class AsignacionPeso
     /**
      * @var decimal $peso
      *
-     * @ORM\Column(name="peso", type="decimal")
+     * @ORM\Column(name="peso", type="decimal", precision=8, scale=2)
      */
     private $peso;
 

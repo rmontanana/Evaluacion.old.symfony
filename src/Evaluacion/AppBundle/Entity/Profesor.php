@@ -76,6 +76,12 @@ class Profesor
      */
     private $rol;
 
+    /**
+     * Grupos a los que imparte clase
+     * @var \Doctrine\Common\Collections\ArrrayCollections $grupos 
+     * @ORM\ManyToMany(targetEntity="Evaluacion\AppBundle\Entity\Grupo", inversedBy="profesores", cascade={"persist"})
+     */
+    protected $grupos;
 
     /**
      * Get id
@@ -194,5 +200,34 @@ class Profesor
     public function __toString()
     {
         return $this->nombre;
+    }
+    
+    /**
+     * Constructor
+     * @return type \Evaluacion\AppBundle\Entity\Profesor
+     */
+    public function __construct()
+    {
+        $this->grupos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add grupos
+     *
+     * @param Evaluacion\AppBundle\Entity\Grupo $grupo
+     */
+    public function addGrupo(\Evaluacion\AppBundle\Entity\Grupo $grupo)
+    {
+        $this->grupos[] = $grupo;
+    }
+
+    /**
+     * Get grupos
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection 
+     */
+    public function getGrupos()
+    {
+        return $this->grupos;
     }
 }

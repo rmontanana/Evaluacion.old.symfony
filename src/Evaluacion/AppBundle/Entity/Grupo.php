@@ -54,6 +54,12 @@ class Grupo
      * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Nivel") 
      */
     private $nivel;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrrayCollections $profesores 
+     * @ORM\ManyToMany(targetEntity="Evaluacion\AppBundle\Entity\Profesor", mappedBy="grupos", cascade={"persist"})
+     */
+    protected $profesores;
 
     /**
      * Get id
@@ -111,5 +117,34 @@ class Grupo
     public function __toString()
     {
         return $this->descripcion;
+    }
+    
+    /**
+     * Constructor
+     * @return type \Evaluacion\AppBundle\Entity\Grupo
+     */
+    public function __construct()
+    {
+        $this->profesores = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add profesores
+     *
+     * @param Evaluacion\AppBundle\Entity\Profesor $profesor
+     */
+    public function addProfesor(\Evaluacion\AppBundle\Entity\Profesor $profesor)
+    {
+        $this->profesores[] = $profesor;
+    }
+
+    /**
+     * Get profesores
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection 
+     */
+    public function getProfesores()
+    {
+        return $this->profesores;
     }
 }
