@@ -23,6 +23,7 @@
 namespace Evaluacion\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Evaluacion\AppBundle\Entity\Profesor
@@ -30,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Profesor
+class Profesor implements UserInterface
 {
     /**
      * @var integer $id
@@ -68,6 +69,12 @@ class Profesor
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
+    
+    /**
+     * @var string $salt
+     * @ORM\Column(name="salt", type="string", length=255)
+     */
+    private $salt;
 
     /**
      * @var string $rol
@@ -83,6 +90,39 @@ class Profesor
      */
     protected $grupos;
 
+    /**
+     * Devuelve si el usuario pasado es igual al actual
+     * @param UserInterface $usuario
+     * @return boolean
+     */
+    public function equals(UserInterface $usuario)
+    {
+        return $this->getLogin() == $usuario->getLogin();
+    }
+    
+    
+    public function eraseCredentials()
+    {
+        
+    }
+    
+    /**
+     * Devuelve un array con los roles del profesor
+     * @return array
+     */
+    public function getRoles()
+    {
+        return array($this->getRol());
+    }
+    
+    /**
+     * Devuelve el login
+     * @return type 
+     */
+    public function getUsername()
+    {
+        return $this->getLogin();
+    }
     /**
      * Get id
      *
@@ -132,6 +172,15 @@ class Profesor
     {
         return $this->email;
     }
+    
+    /**
+     * Deuelve el usuario
+     * @return string
+     */
+    public function getLogin()
+    {
+        return $this->usuario;
+    }
 
     /**
      * Set usuario
@@ -171,6 +220,24 @@ class Profesor
     public function getPassword()
     {
         return $this->password;
+    }
+    
+    /**
+     * Get salt
+     * @return string
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+    
+    /**
+     * Establece la semilla
+     * @param string $salt 
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
     }
 
     /**

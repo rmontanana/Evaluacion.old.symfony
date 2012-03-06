@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************
  * AppBundle/DataFixtures/ORM/LoadNivelGrupo
- * Carga de datos de prueba en la base de datos (Nivel-Grupo)
+ * Carga de datos de prueba en la base de datos (Nivel - Grupo)
  * (C) Copyright 2012 Ricardo Montañana <rmontanana@gmail.com>
  * This file is part of Evaluacion.
  * ***************************************************************************
@@ -55,5 +55,3 @@ class LoadNivelGrupo implements FixtureInterface
         $manager->flush();
     }
 }
-
-

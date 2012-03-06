@@ -23,12 +23,20 @@
 namespace Evaluacion\AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Evaluacion\AppBundle\Entity\Profesor;
 
 
-class LoadProfesor implements FixtureInterface
+class LoadProfesor implements FixtureInterface, ContainerAwareInterface
 {
+    private $container;
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
   
     public function load(ObjectManager $manager)
     {
@@ -37,7 +45,9 @@ class LoadProfesor implements FixtureInterface
         $profesor->setNombre('Ricardo Montañana Gómez');
         $profesor->setEmail('rmontanana@gmail.com');
         $profesor->setUsuario('rmontanana');
-        $profesor->setPassword(crypt('galeote'));
+        $profesor->setSalt(md5(time()));
+        $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
+        $profesor->setPassword($encoder->encodePassword('prueba', $profesor->getSalt()));
         $profesor->setRol('ROL_ADMIN');
         $manager->persist($profesor);
         //Lucía
@@ -45,7 +55,9 @@ class LoadProfesor implements FixtureInterface
         $profesor->setNombre('Lucía Montañana Fuentes');
         $profesor->setEmail('lumontanana@gmail.com');
         $profesor->setUsuario('lmontanana');
-        $profesor->setPassword(crypt('abcdefgh1234'));
+        $profesor->setSalt(md5(time()));
+        $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
+        $profesor->setPassword($encoder->encodePassword('abcdefgh1234', $profesor->getSalt()));
         $profesor->setRol('ROL_USER');
         $manager->persist($profesor);
         //Pablo
@@ -53,7 +65,9 @@ class LoadProfesor implements FixtureInterface
         $profesor->setNombre('Pablo Montañana Fuentes');
         $profesor->setEmail('pmontanana@gmail.com');
         $profesor->setUsuario('pmontanana');
-        $profesor->setPassword(crypt('patatafrita'));
+        $profesor->setSalt(md5(time()));
+        $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
+        $profesor->setPassword($encoder->encodePassword('patatafrita', $profesor->getSalt()));
         $profesor->setRol('ROL_USER');
         $manager->persist($profesor);
         //Raquel
@@ -61,13 +75,12 @@ class LoadProfesor implements FixtureInterface
         $profesor->setNombre('Raquel Navarro Sánchez');
         $profesor->setEmail('raquelnavarrosa@gmail.com');
         $profesor->setUsuario('raquelnavarrosa');
-        $profesor->setPassword(crypt('galeote'));
+        $profesor->setSalt(md5(time()));
+        $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
+        $profesor->setPassword($encoder->encodePassword('prueba', $profesor->getSalt()));
         $profesor->setRol('ROL_USER');
         $manager->persist($profesor);
         //Graba en BD
         $manager->flush();
-
     }
 }
-
-
