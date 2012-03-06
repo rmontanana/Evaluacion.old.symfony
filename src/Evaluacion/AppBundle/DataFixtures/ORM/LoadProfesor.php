@@ -45,7 +45,7 @@ class LoadProfesor implements FixtureInterface, ContainerAwareInterface
         $profesor->setNombre('Ricardo Montañana Gómez');
         $profesor->setEmail('rmontanana@gmail.com');
         $profesor->setUsuario('rmontanana');
-        $profesor->setSalt(md5(time()));
+        $profesor->setSalt(md5(time() + rand(100, 10000)));
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
         $profesor->setPassword($encoder->encodePassword('prueba', $profesor->getSalt()));
         $profesor->setRol('ROL_ADMIN');
@@ -55,7 +55,7 @@ class LoadProfesor implements FixtureInterface, ContainerAwareInterface
         $profesor->setNombre('Lucía Montañana Fuentes');
         $profesor->setEmail('lumontanana@gmail.com');
         $profesor->setUsuario('lmontanana');
-        $profesor->setSalt(md5(time()));
+        $profesor->setSalt(md5(time() + rand(100, 10000)));
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
         $profesor->setPassword($encoder->encodePassword('abcdefgh1234', $profesor->getSalt()));
         $profesor->setRol('ROL_USER');
@@ -65,7 +65,7 @@ class LoadProfesor implements FixtureInterface, ContainerAwareInterface
         $profesor->setNombre('Pablo Montañana Fuentes');
         $profesor->setEmail('pmontanana@gmail.com');
         $profesor->setUsuario('pmontanana');
-        $profesor->setSalt(md5(time()));
+        $profesor->setSalt(md5(time() + rand(100, 10000)));
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
         $profesor->setPassword($encoder->encodePassword('patatafrita', $profesor->getSalt()));
         $profesor->setRol('ROL_USER');
@@ -75,7 +75,7 @@ class LoadProfesor implements FixtureInterface, ContainerAwareInterface
         $profesor->setNombre('Raquel Navarro Sánchez');
         $profesor->setEmail('raquelnavarrosa@gmail.com');
         $profesor->setUsuario('raquelnavarrosa');
-        $profesor->setSalt(md5(time()));
+        $profesor->setSalt(md5(time() + rand(100, 10000)));
         $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
         $profesor->setPassword($encoder->encodePassword('prueba', $profesor->getSalt()));
         $profesor->setRol('ROL_USER');
