@@ -24,6 +24,8 @@ namespace Evaluacion\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Evaluacion\AppBundle\Entity\Profesor
@@ -53,6 +55,7 @@ class Profesor implements UserInterface
      * @var string $email
      *
      * @ORM\Column(name="email", type="string", length=45)
+     * @Assert\Email(message = "La dirección '{{value}}' no es válida.")
      */
     private $email;
 
@@ -60,6 +63,9 @@ class Profesor implements UserInterface
      * @var string $usuario
      *
      * @ORM\Column(name="usuario", type="string", length=45)
+     * @Assert\Regex(pattern = "^([a-zA-Z])[a-zA-Z_-]*[\w_-]*[\S]$|^([a-zA-Z])[0-9_-]*[\S]$|^[a-zA-Z]*[\S]$",
+     *               message = "El nombre de usuario no es válido."
+     *              )
      */
     private $usuario;
 
@@ -80,6 +86,7 @@ class Profesor implements UserInterface
      * @var string $rol
      *
      * @ORM\Column(name="rol", type="string", length=20)
+     * @Assert\Choice(choices = {"ROLE_USER", "ROLE_ADMIN"}, message = "Elige un rol válido.")
      */
     private $rol;
 
