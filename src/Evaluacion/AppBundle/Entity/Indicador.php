@@ -23,6 +23,7 @@
 namespace Evaluacion\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Evaluacion\AppBundle\Entity\Indicador
@@ -45,6 +46,7 @@ class Indicador
      * @var text $descripcion
      *
      * @ORM\Column(name="descripcion", type="text")
+     * @Assert\NotNull(message = "La descripción no puede estar vacía")
      */
     private $descripcion;
 
@@ -53,7 +55,7 @@ class Indicador
      *
      * @ORM\Column(name="minimo", type="boolean")
      */
-    private $minimo;
+    private $minimo = false;
 
     /**
      * @var text $competencia

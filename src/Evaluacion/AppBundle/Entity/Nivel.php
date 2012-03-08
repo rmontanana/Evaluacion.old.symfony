@@ -21,6 +21,7 @@
  * ***************************************************************************
  */
 namespace Evaluacion\AppBundle\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -45,6 +46,7 @@ class Nivel
      * @var string $descripcion
      *
      * @ORM\Column(name="descripcion", type="string", length=45)
+     * @Assert\NotNull(message = "La descripción no puede estar vacía")
      */
     private $descripcion;
 

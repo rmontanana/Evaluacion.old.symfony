@@ -23,6 +23,7 @@
 namespace Evaluacion\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Evaluacion\AppBundle\Entity\Alumno
@@ -45,6 +46,7 @@ class Alumno
      * @var string $nombre
      *
      * @ORM\Column(name="nombre", type="string", length=100)
+     * @Assert\NotNull(message = "El nombre no puede estar vacío")
      */
     private $nombre;
 
@@ -52,6 +54,7 @@ class Alumno
      * @var string $apellidos
      *
      * @ORM\Column(name="apellidos", type="string", length=100)
+     * @Assert\NotNull(message = "Los apellidos no pueden estar vacíos")
      */
     private $apellidos;
 
@@ -59,6 +62,7 @@ class Alumno
      * @var string $email
      *
      * @ORM\Column(name="email", type="string", length=45)
+     * @Assert\Email()(message = "La dirección '{{value}}' no es válida.")
      */
     private $email;
 

@@ -23,6 +23,7 @@
 namespace Evaluacion\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Evaluacion\AppBundle\Entity\Materia
@@ -45,6 +46,7 @@ class Materia
      * @var string $descripcion
      *
      * @ORM\Column(name="descripcion", type="string", length=100)
+     * @Assert\NotNull(message = "La descripción no puede estar vacía")
      */
     private $descripcion;
 
@@ -53,7 +55,7 @@ class Materia
      *
      * @ORM\Column(name="optativa", type="boolean")
      */
-    private $optativa;
+    private $optativa = false;
 
     /**
      * @var string $nivel
