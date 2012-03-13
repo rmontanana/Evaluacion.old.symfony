@@ -3,7 +3,10 @@
 {% extends '::base.html.twig' %}
 
 {% block stylesheets %}
-{% stylesheets '@AppBundle/Resources/public/css/bootstrap-responsive.min.css'
+{% stylesheets 
+    '@AppBundle/Resources/public/css/bootstrap-responsive.min.css'
+    '@AppBundle/Resources/public/css/bootstrap.min.css'
+    '@AppBundle/Resources/public/css/docs.css'
 %}
  <link rel="stylesheet" href="{{ asset_url }}" />
 {% endstylesheets %} 
@@ -21,14 +24,15 @@
 {% endblock %}
 {% block body %}
 <div class="navbar navbar-fixed-top">
+    
       <div class="navbar-inner">
         <div class="container">
+          <a class="brand" href="#">Evaluación</a>
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Project name</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
