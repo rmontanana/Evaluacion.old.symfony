@@ -1,0 +1,13 @@
+Administración: 
+    Profesores: "@profesor"
+    Grupos: "@grupo"
+    Alumnos: "@alumno"
+    Niveles: "@nivel"
+    Competencias: "@competencia"
+    Materias: "@materia"
+    Criterios de Evaluación: "@criterioEvaluacion"
+    Evaluaciones: "@evaluacion"
+    Grupos Profesor: "@gruposProfesor"
+Profesor:
+    Indicadores: "@indicador"
+    Evaluación: "@evaluacion"   

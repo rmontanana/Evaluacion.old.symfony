@@ -1,27 +1,8 @@
 {# AppBundle/Resources/views/index.html.twig #}
 
-{% extends '::base.html.twig' %}
+{% extends 'AppBundle::layout.html.twig' %}
 
-{% block stylesheets %}
-{% stylesheets 
-    '@AppBundle/Resources/public/css/bootstrap-responsive.min.css'
-    '@AppBundle/Resources/public/css/bootstrap.min.css'
-    '@AppBundle/Resources/public/css/docs.css'
-%}
- <link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %} 
  
-     <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-     </style>
-    <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-{% endblock %}
 {% block body %}
 
      <div class="navbar navbar-fixed-top">
@@ -35,57 +16,22 @@
           <a class="brand" href="./index.html">Evaluación</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                {# Crea el menú de la aplicación #}
+                {% for opcion, dato in menu %}
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ opcion }}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li class="divider"></li>
-                      <li><a href="#">Separated link</a></li>
+                    {% for op, dat in dato %}
+                        <li><a href="{{ dat }}">{{ op }}</a></li>
+                    {% endfor %}
                     </ul>
-              </li>
-              <li class="">
-                <a href="./index.html">Overview</a>
-              </li>
-              <li class="">
-                <a href="./scaffolding.html">Scaffolding</a>
-              </li>
-              <li class="">
-                <a href="./base-css.html">Base CSS</a>
-              </li>
-              <li class="active">
-                <a href="./components.html">Components</a>
-              </li>
-              <li class="">
-                <a href="./javascript.html">Javascript plugins</a>
-              </li>
-              <li class="">
-                <a href="./less.html">Using LESS</a>
-              </li>
-              <li class="divider-vertical"></li>
-              <li class="">
-                <a href="./download.html">Customize</a>
-              </li>
-              <li class="">
-                <a href="./examples.html">Examples</a>
-              </li>
+                    </li>
+                {% endfor %}
             </ul>
           </div>
         </div>
       </div>
     </div>  
-    
-    
-   
-Hello {{ name }}!
-{% endblock %}
+    Hello {{ name }}!
 
-{% block javascripts %}
-{% javascripts    
-    '@AppBundle/Resources/public/js/jquery.js'
-    '@AppBundle/Resources/public/js/bootstrap.min.js'
-%}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}
 {% endblock %}
