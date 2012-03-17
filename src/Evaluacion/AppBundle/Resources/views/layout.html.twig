@@ -3,10 +3,10 @@
 {% extends '::base.html.twig' %}
 {% block cabecera %}
     {% block stylesheets %}
-        {% stylesheets 
+        {% stylesheets filter="cssrewrite"
             '@AppBundle/Resources/public/css/bootstrap-responsive.min.css'
             '@AppBundle/Resources/public/css/bootstrap.min.css'
-            '@AppBundle/Resources/public/css/docs.css'
+            'bundles/app/css/docs.css'
         %}
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
@@ -17,6 +17,33 @@
         }
     </style>
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+{% endblock %}
+{% block body %}
+    {# Establece la cabecera común a toda la aplicación #}
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="nav">
+            <a class="brand" href="./index.html">Evaluación</a>
+          </div>
+          <div class="nav">
+            <h3 class="brand"><small>{% block centro %}{% endblock %}</small></h3>
+          </div>
+          <div class="nav-collapse">    
+            {% block menu %}{% endblock %}
+          </div>
+          <div class="nav">
+            <h3 class="brand"><small>{% block usuario %}{% endblock %}</small></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% block cuerpo %}{% endblock %}
 {% endblock %}
 {% block javascripts %}
     {% javascripts    
