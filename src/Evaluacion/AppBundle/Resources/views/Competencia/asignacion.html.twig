@@ -1,4 +1,4 @@
-{# AppBundle/Default/index.html.twig #}
+{# AppBundle/Competencia/asignacio.html.twig #}
 
 {% extends 'AppBundle::layout.html.twig' %}
 
@@ -7,10 +7,14 @@
 {% block centro %}{{ centro }}{% endblock %}
 
 {% block usuario %}{{ usuario }}<a href="#">{{ enlaceUsuario }}</a>{% endblock %}
+
 {% block menu %}
-{% include 'AppBundle::menu.html.twig' %}
+    {% include 'AppBundle::menu.html.twig' %}
 {% endblock %}
 
 {% block cuerpo %}
-    Hello {{ name }}!
+<form action="{{ path('comp_asig') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input type="submit" />
+</form>
 {% endblock %}

@@ -11,6 +11,9 @@ class DefaultController extends Controller
     public function indexAction($name)
     {
         $menu = Util::getMenu();
-        return $this->render('AppBundle:Default:index.html.twig', array('name' => $name, 'menu' => $menu));
+        $usuario = "Ricardo Montañana Gómez"; $enlace = "(salir)";
+        $centro = "I.E.S.O. Pascual Serrano";
+        $param = array('titulo' => 'Índice', 'name' => $name, 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace,'centro' =>$centro);
+        return $this->render('AppBundle:Default:index.html.twig', $param);
     }
 }
