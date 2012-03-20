@@ -22,7 +22,7 @@
 <script type="text/javascript">
 function rellenaMateria(id) {
     $('#prueba').html(id);
-    jQuery.ajax({url: "{{ path('ajax_nivel') }}", type: 'POST', dataType: 'html', 
+    jQuery.ajax({url: "{{ path('ajax_nivel') }}", type: 'POST', dataType: 'application/json', data: {id: id},
         success: function (data, textStatus,jqXHR) { jQuery('#prueba').html(data); },
         error: function(jqXHR, textStatus, errorThrown) { jQuery('#prueba').html("...Error....ddddd"); }});
     //$('#form_test').value("pruebasssss");

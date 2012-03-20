@@ -133,12 +133,12 @@ class CompetenciaController extends Controller
      */
     public function ajaxNivel()
     {
-        //if ($this->getRequest()>isXmlHttpRequest()) {
+        //return new Response(json_encode(array("hola" => $this->getRequest()->get('id'))));
+        if ($this->getRequest()->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getEntityManager();
-            echo "llamada ajax";
-            $materias = $em->getRepository('AppBundle:Materia')
-                        ->findByNivelId($this->getRequest()->get('nivel'));
-            return new Response($materias);
-        //}
+            $materias = $em->getRepository('AppBundle:Materia')->findAll()->toArray(true); //quizá creando un query?
+                        //->findByNivelId($this->getRequest()->get('nivel'));
+            return new Response(json_encode($materias));
+        }
     }
 }
