@@ -25,11 +25,12 @@ namespace Evaluacion\AppBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Evaluacion\AppBundle\Entity\Profesor;
 
 
-class LoadProfesor implements FixtureInterface, ContainerAwareInterface
+class LoadProfesor implements FixtureInterface, ContainerAwareInterface, OrderedFixtureInterface
 {
     private $container;
 
@@ -82,5 +83,9 @@ class LoadProfesor implements FixtureInterface, ContainerAwareInterface
         $manager->persist($profesor);
         //Graba en BD
         $manager->flush();
+    }
+    public function getOrder()
+    {
+        return 1;
     }
 }

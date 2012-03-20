@@ -23,11 +23,12 @@
 namespace Evaluacion\AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Evaluacion\AppBundle\Entity\Competencia;
 
 
-class LoadCompetencia implements FixtureInterface
+class LoadCompetencia implements FixtureInterface, OrderedFixtureInterface
 {
   
     public function load(ObjectManager $manager)
@@ -50,6 +51,10 @@ class LoadCompetencia implements FixtureInterface
         }
         //Graba en BD
         $manager->flush();
+    }
+    public function getOrder()
+    {
+        return 0;
     }
 }
 

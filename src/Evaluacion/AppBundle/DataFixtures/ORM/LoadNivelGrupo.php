@@ -23,12 +23,13 @@
 namespace Evaluacion\AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Evaluacion\AppBundle\Entity\Nivel;
 use Evaluacion\AppBundle\Entity\Grupo;
 
 
-class LoadNivelGrupo implements FixtureInterface
+class LoadNivelGrupo implements FixtureInterface, OrderedFixtureInterface
 {
   
     public function load(ObjectManager $manager)
@@ -53,5 +54,9 @@ class LoadNivelGrupo implements FixtureInterface
         }
         //Graba en BD
         $manager->flush();
+    }
+    public function getOrder()
+    {
+        return 2;
     }
 }

@@ -23,12 +23,13 @@
 namespace Evaluacion\AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Evaluacion\AppBundle\Entity\Nivel;
 use Evaluacion\AppBundle\Entity\Materia;
 use Evaluacion\AppBundle\Entity\CriterioEvaluacion;
 
-class LoadCriterioEvaluacion implements FixtureInterface
+class LoadCriterioEvaluacion implements FixtureInterface, OrderedFixtureInterface
 {
   
     public function load(ObjectManager $manager)
@@ -74,7 +75,11 @@ class LoadCriterioEvaluacion implements FixtureInterface
             //echo "Fin de proceso del archivo.\n";
         }
         $manager->flush();
-    }  
+    }
+    public function getOrder()
+    {
+        return 4;
+    }
 }
 
 
