@@ -28,6 +28,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Event\DataEvent;
+use Symfony\Component\HttpFoundation\Response;
 use Evaluacion\AppBundle\Util\Util;
 use Evaluacion\AppBundle\Entity\Competencia;
 use Evaluacion\AppBundle\Entity\Indicador;
@@ -51,8 +52,15 @@ class CompetenciaController extends Controller
         $usuario = "Ricardo Montañana Gómez"; $enlace="(salir)";
         $centro="I.E.S.O. Pascual Serrano";
         $form = $this->creaFormulario();
+        
         $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'form' => $form);
+                       'form' => $form->createView());
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            return $this->render('AppBundle:Competencia:asignacion.html.twig', $param);
+        }
+        
         return $this->render('AppBundle:Competencia:asignacion.html.twig', $param);
     }
     private function creaFormulario()
@@ -60,8 +68,10 @@ class CompetenciaController extends Controller
         $factory = $this->get('form.factory');
         $builder=$this->createFormBuilder();
         $form = $builder
-            ->add('Nivel', 'entity', array('class' => 'AppBundle:Nivel'))            
-            //->add('Materia', 'entity', array('class' => 'AppBundle:Materia'))
+            ->add('Nivel', 'entity', array('class' => 'AppBundle:Nivel', 'empty_value' => 'Selecciona Nivel',
+                                           'attr'=> array("onchange" => "rellenaMateria(this.value);")))
+            ->add('test', 'text')
+            ->add('Materia', 'choice', array('empty_value' => 'Selecciona Materia'))
             ->add('Competencia', 'entity', array('class' => 'AppBundle:Competencia',
                                                  'query_builder' => function (EntityRepository $er) {
                                                                     $qb = $er->createQueryBuilder('c')->orderBy('c.descripcion','ASC');
@@ -71,10 +81,9 @@ class CompetenciaController extends Controller
             ->getForm();
         
         /* Crea el método para actualizar por ajax las materias de un nivel. */
-        $refreshMateria = function ($form, $nivel) use ($builder) {
-                $form->add($builder->createNamed('Materia' , 'entity', null, array(
+        $refreshMateria = function ($form, $nivel) use ($factory) {
+                $form->add($factory->createNamed('entity', 'Materia2', null, array(
                                 'class'         => 'AppBundle:Materia',
-                                'property'      => 'descripcion',
                                 'label'         => 'Materia',
                                 'query_builder' => function (EntityRepository $repository) use ($nivel) {
                                                                 $qb = $repository->createQueryBuilder('materias');
@@ -111,11 +120,25 @@ class CompetenciaController extends Controller
             $form = $event->getForm();
             $data = $event->getData();
  
-            //if(array_key_exists('nivel', $data)) {
+            if(array_key_exists('nivel', $data)) {
                  $refreshMateria($form, $data['nivel']);
-            //}
+            }
         });
-        return $form->createView();
+        return $form;
+    }
+    
+    /** 
+     * @Route("/ajaxNivel", name="ajax_nivel")
+     * @return string
+     */
+    public function ajaxNivel()
+    {
+        //if ($this->getRequest()>isXmlHttpRequest()) {
+            $em = $this->getDoctrine()->getEntityManager();
+            echo "llamada ajax";
+            $materias = $em->getRepository('AppBundle:Materia')
+                        ->findByNivelId($this->getRequest()->get('nivel'));
+            return new Response($materias);
+        //}
     }
 }
-

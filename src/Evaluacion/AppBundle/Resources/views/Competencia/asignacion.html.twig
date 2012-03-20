@@ -17,4 +17,45 @@
     {{ form_widget(form) }}
     <input type="submit" />
 </form>
+
+<div id="prueba"> </div>
+<script type="text/javascript">
+function rellenaMateria(id) {
+    $('#prueba').html(id);
+    jQuery.ajax({url: "{{ path('ajax_nivel') }}", type: 'POST', dataType: 'html', 
+        success: function (data, textStatus,jqXHR) { jQuery('#prueba').html(data); },
+        error: function(jqXHR, textStatus, errorThrown) { jQuery('#prueba').html("...Error....ddddd"); }});
+    //$('#form_test').value("pruebasssss");
+    /*
+    $('#prueba').ajax({
+      url: {{ path('ajax_nivel') }},
+      data: id,
+      dataType: "text/html",
+      success: (function(data) {
+        $('#prueba').html("pruebasssss");
+      })
+    });
+    $('#prueba').load({
+        url: {{ path('ajax_nivel') }},
+        data: id
+    });*/
+};
+
+</script>
+<script type="text/javascript">
+/*$(document).ready(function() {   
+  $('#form_Competencia').change(function() {
+    $('#prueba').html("aadioss");
+    $('input#form_test').value="pruebasssss";
+    $.ajax({
+      url: "{{ path('ajax_nivel') }}",
+      data: this.value,
+      dataType: "text/html",
+      success: (function(data) {
+        $('input#form_test').value="pruebasssss";
+      })
+    });
+  });
+});*/
+</script>
 {% endblock %}
