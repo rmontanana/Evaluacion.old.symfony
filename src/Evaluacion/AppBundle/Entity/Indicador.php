@@ -70,6 +70,13 @@ class Indicador
      * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\CriterioEvaluacion")
      */
     private $criterioEvaluacion;
+    
+     /**
+     * @var string $unidad
+     * 
+     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Unidad")
+     */
+    private $unidad;
 
 
     /**
@@ -160,6 +167,26 @@ class Indicador
     public function getCriterioEvaluacion()
     {
        return $this->criterioEvaluacion;
+    }
+    
+     /**
+     * Set unidad didáctica
+     * 
+     * @param \Evaluacion\AppBundle\Entity\Unidad $unidad 
+     */
+    public function setUnidad(\Evaluacion\AppBundle\Entity\Unidad $unidad)
+    {
+        $this->unidad = $unidad;
+    }
+    
+    /**
+     * Get unidad didáctica
+     * 
+     * @return Evaluacion\AppBundle\Entity\Unidad
+     */
+    public function getUnidad()
+    {
+        return $this->unidad;
     }
     
     /**

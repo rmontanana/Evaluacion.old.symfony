@@ -1,4 +1,4 @@
-{# AppBundle/Competencia/asignacion.html.twig #}
+{# AppBundle/Competencia/asignacionIndicador.html.twig #}
 
 {% extends 'AppBundle::layout.html.twig' %}
 
@@ -13,10 +13,24 @@
 {% endblock %}
 
 {% block cuerpo %}
-<form action="{{ path('comp_asig') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <input type="submit" />
-</form>
+{# Cabecera con los datos #}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Competencia</th>
+            <th>Nivel</th>
+            <th>Materia</th>
+        </tr>
+        <tr>
+            <td>{{ datos.Competencia.descripcion }}</td>
+            <td>{{ datos.Nivel.descripcion }}</td>
+            <td>{{ datos.Materia[1] }}</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for 
+    </tbody>
+</table>
 
 <div id="prueba"> </div>
 <script type="text/javascript">
@@ -29,7 +43,7 @@ function rellenaMateria(id) {
                         items.push('<option value="">Selecciona Materia</option>');
                         if (data.length > 0) {
                             $.each(data,function(i,materia) {
-                                items.push('<option value="' + materia.id + '=>' + materia.descripcion + '">' + materia.descripcion + "</option>");
+                                items.push('<option value="' + materia.id + '">' + materia.descripcion + "</option>");
                             });
                         }
                         $('#form_Materia').html(items.join(''));

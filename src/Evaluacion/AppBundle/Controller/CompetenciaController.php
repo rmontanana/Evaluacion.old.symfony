@@ -58,11 +58,24 @@ class CompetenciaController extends Controller
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
-            return $this->render('AppBundle:Competencia:asignacion.html.twig', $param);
+            $datos = $form->getData();
+            //$this->container->get('logger')->debug("datos = ".print_r($datos));
+            //Arregla el dato que viene de la materia.
+            $datos['Materia'] = explode('=>', $datos['Materia']);
+            //Obtiene todos los indicadores de la materia correspondiente.
+            $indicadores = $em->getRepository('AppBundle:Indicador')->findAllByMateria($datos['Materia'][0]);
+            $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'datos' => $datos, 'indicadores' => $indicadores);
+            return $this->render('AppBundle:Competencia:asignacionIndicador.html.twig', $param);
         }
         
         return $this->render('AppBundle:Competencia:asignacion.html.twig', $param);
     }
+    
+    /**
+     * Crea el formulario para seleccionar: nivel-materia-competencia
+     * @return formulario 
+     */
     private function creaFormulario()
     {       
         $factory = $this->get('form.factory');
@@ -70,60 +83,13 @@ class CompetenciaController extends Controller
         $form = $builder
             ->add('Nivel', 'entity', array('class' => 'AppBundle:Nivel', 'empty_value' => 'Selecciona Nivel',
                                            'attr'=> array("onchange" => "rellenaMateria(this.value);")))
-            ->add('test', 'text')
             ->add('Materia', 'choice', array('empty_value' => 'Selecciona Materia'))
             ->add('Competencia', 'entity', array('class' => 'AppBundle:Competencia',
                                                  'query_builder' => function (EntityRepository $er) {
                                                                     $qb = $er->createQueryBuilder('c')->orderBy('c.descripcion','ASC');
                                                                     return $qb;
-                                                 }
-                ))
+                                                                    }))
             ->getForm();
-        
-        /* Crea el método para actualizar por ajax las materias de un nivel. */
-        $refreshMateria = function ($form, $nivel) use ($factory) {
-                $form->add($factory->createNamed('entity', 'Materia2', null, array(
-                                'class'         => 'AppBundle:Materia',
-                                'label'         => 'Materia',
-                                'query_builder' => function (EntityRepository $repository) use ($nivel) {
-                                                                $qb = $repository->createQueryBuilder('materias');
-                                                                            //->select('materia m'); 
-                                                        if($nivel instanceof Nivel) {
-                                                            $qb = $qb->where('materias.nivel = :nivel')
-                                                                        ->setParameter('nivel', $nivel);
-                                                        } elseif(is_numeric($nivel)) {
-                                                            $qb = $qb->where('materias.nivel_id = :nivel')
-                                                                        ->setParameter('nivel', $nivel);
-                                                        } else {
-                                                            $qb = $qb->where('materias.nivel_id = 208');
-                                                        }
-                                                        $qb = $qb->orderBy('materias.descripcion', 'ASC');
-
-                                                        return $qb;
-                                                    }
-                        )));
-        };
-       
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (DataEvent $event) use ($refreshMateria) {
-            $form = $event->getForm();
-            $data = $event->getData();
-
-            /*if($data == null)
-                return;  //As of beta2, when a form is created setData(null) is called first
- 
-            if($data instanceof Nivel) {*/
-                 $refreshMateria($form, $data);
-            //}
-        });
- 
-        $builder->addEventListener(FormEvents::PRE_BIND, function (DataEvent $event) use ($refreshMateria) {
-            $form = $event->getForm();
-            $data = $event->getData();
- 
-            if(array_key_exists('nivel', $data)) {
-                 $refreshMateria($form, $data['nivel']);
-            }
-        });
         return $form;
     }
     
@@ -136,9 +102,12 @@ class CompetenciaController extends Controller
         //return new Response(json_encode(array("hola" => $this->getRequest()->get('id'))));
         if ($this->getRequest()->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getEntityManager();
-            $materias = $em->getRepository('AppBundle:Materia')->findAll()->toArray(true); //quizá creando un query?
-                        //->findByNivelId($this->getRequest()->get('nivel'));
-            return new Response(json_encode($materias));
+            $materias = $em->getRepository('AppBundle:Materia')
+                    ->findByNivel($this->getRequest()->get('id'));
+            foreach ($materias as $materia) {
+                $resp[]=array('id' => $materia->getId(), 'descripcion' => $materia->getDescripcion());
+            }
+            return new Response(json_encode($resp));
         }
     }
 }
