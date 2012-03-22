@@ -63,6 +63,7 @@ class CompetenciaController extends Controller
             //Arregla el dato que viene de la materia.
             $datos['Materia'] = explode('=>', $datos['Materia']);
             //Obtiene todos los indicadores de la materia correspondiente.
+            // TODO Crear un Repositorio para Materias que permita hacer esta consulta.
             $indicadores = $em->getRepository('AppBundle:Indicador')->findAllByMateria($datos['Materia'][0]);
             $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
                        'datos' => $datos, 'indicadores' => $indicadores);
