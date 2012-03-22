@@ -17,18 +17,44 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Competencia</th>
-            <th>Nivel</th>
-            <th>Materia</th>
+            <th><h2>Competencia</th>
+            <th><h2>Nivel</th>
+            <th><h2>Materia</th>
         </tr>
         <tr>
-            <td>{{ datos.Competencia.descripcion }}</td>
-            <td>{{ datos.Nivel.descripcion }}</td>
-            <td>{{ datos.Materia[1] }}</td>
+            <td><h3>{{ datos.Competencia.descripcion }}</td>
+            <td><h3>{{ datos.Nivel.descripcion }}</td>
+            <td><h3>{{ datos.Materia[1] }}</td>
+        </tr>
+    </thead>
+</table>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th colspan="3" text-align="center"><h2>Indicadores</h2></th>
+        </tr>
+        <tr>
+            <td><h3>Unidad Didáctica</td>
+            <td><h3>Indicador</td>
+            <td><h3>Acción</td>
         </tr>
     </thead>
     <tbody>
-        {% for 
+        {% for indicador in indicadores %}
+            <tr>
+                <td>{{ indicador.unidad }}</td>
+                {% if indicador.minimo %}
+                    <td><bold>{{ indicador.indicador }}<bold></td>
+                {% else %}
+                    <td>{{ indicador.indicador }}</td>
+                {% endif %}
+                {% if indicador.minimo %}
+                    <td><button class="btn btn-primary" href="#"><i class="icon-ok icon-white"></i></buttonn></td>
+                {% else %}
+                    <td><button class="btn btn-danger" href="#"><i class="icon-remove icon-white"></i></buttonn></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
 

@@ -42,7 +42,7 @@ class LoadIndicadorMateria implements FixtureInterface, OrderedFixtureInterface
             //Obtiene el nivel que vamos a procesar.
             $nivel = $manager->getRepository("AppBundle:Nivel")->findOneBy(array('descripcion' => $nivelDato));
             //Obtiene la materia de ese nivel que corresponde al
-            $materia = $manager->getRepository("AppBundle:Materia")->findOneBy(array ('descripcion' => $informacion['materia'], 'nivel' => $nivel));
+            $materia = $manager->getRepository("AppBundle:Materia")->findOneBy(array ('descripcion' => $informacion['materia'], 'nivel' => $nivel->getId()));
             $unidadAnterior = "";
             //echo "Abrimos archivo [".$directorio.$archivo."] de nivel [".$nivelDato."]\n";
             if (($gestor = fopen($directorio.$informacion['archivo'], "r")) !== false) {

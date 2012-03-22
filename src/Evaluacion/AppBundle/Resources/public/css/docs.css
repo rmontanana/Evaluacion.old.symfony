@@ -5,6 +5,12 @@
   Special styles for presenting Bootstrap's documentation and examples
 */
 
+/* Tablas
+-------------------------------------------------- */
+.table th, .table td {
+    vertical-align: middle;
+}
+
 
 /* Body and structure
 -------------------------------------------------- */
@@ -44,6 +50,14 @@ body {
 -------------------------------------------------- */
 section {
   padding-top: 60px;
+}
+/* Para salvar el problema de assetic y las imágenes en los css
+-------------------------------------------------- */
+[class^="icon-"], [class*=" icon-"] {
+  background-image: url("../img/glyphicons-halflings.png");
+}
+.icon-white {
+  background-image: url("../img/glyphicons-halflings-white.png");
 }
 
 /* Faded out hr */

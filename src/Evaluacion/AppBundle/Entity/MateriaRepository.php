@@ -23,8 +23,6 @@
 
 namespace Evaluacion\AppBundle\Entity;
 use Doctrine\ORM\EntityRepository;
-use Evaluacion\AppBundle\Materia;
-use Evaluacion\AppBundle\Indicador;
 
 class MateriaRepository extends EntityRepository
 {
@@ -36,8 +34,14 @@ class MateriaRepository extends EntityRepository
     public function findIndicadoresByMateria(Materia $materia)
     {   
         $em = $this->getEntityManager();
-        $dql = 
+        $dql = "SELECT  u.descripcion as unidad, i.descripcion as indicador, i.minimo as minimo
+                FROM    AppBundle:Indicador i
+                JOIN    i.unidad u
+                WHERE   u.materia = :materia";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('materia', $materia);
+        $indicadores = $consulta->getResult();
         return $indicadores;
     }
 }
-?>
+

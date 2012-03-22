@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Evaluacion\AppBundle\Entity\Materia
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Evaluacion\AppBundle\Entity\MateriaRepository")
  */
 class Materia
 {
