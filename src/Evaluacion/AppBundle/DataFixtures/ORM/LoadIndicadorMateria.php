@@ -27,45 +27,39 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Evaluacion\AppBundle\Entity\Nivel;
 use Evaluacion\AppBundle\Entity\Materia;
-use Evaluacion\AppBundle\Entity\CriterioEvaluacion;
+use Evaluacion\AppBundle\Entity\Indicador;
+use Evaluacion\AppBundle\Entity\Unidad;
 
-class LoadCriterioEvaluacion implements FixtureInterface, OrderedFixtureInterface
+class LoadIndicadorMateria implements FixtureInterface, OrderedFixtureInterface
 {
   
     public function load(ObjectManager $manager)
     {
-        $niveles = array ('Primero' => 'IndicadoresMatematicasPrimero.csv', 
+        $niveles = array ('Primero' => array ('materia' => 'Matemáticas', 'archivo' => 'IndicadoresMatematicasPrimero.csv'), 
                          );
         $directorio = getcwd()."/src/Evaluacion/AppBundle/DataFixtures/ORM/csv/";
-        foreach ($niveles as $nivelDato => $archivo) {
-            //Utilizada para saltarse la primera línea de los CSV que contiene
-            //la definición de los campos
-            $primero = true;
+        foreach ($niveles as $nivelDato => $informacion) {
             //Obtiene el nivel que vamos a procesar.
             $nivel = $manager->getRepository("AppBundle:Nivel")->findOneBy(array('descripcion' => $nivelDato));
-            $materiaAnterior = "";
+            //Obtiene la materia de ese nivel que corresponde al
+            $materia = $manager->getRepository("AppBundle:Materia")->findOneBy(array ('descripcion' => $informacion['materia'], 'nivel' => $nivel));
+            $unidadAnterior = "";
             //echo "Abrimos archivo [".$directorio.$archivo."] de nivel [".$nivelDato."]\n";
-            if (($gestor = fopen($directorio.$archivo, "r")) !== false) {
+            if (($gestor = fopen($directorio.$informacion['archivo'], "r")) !== false) {
                 //Guarda los criterios de evaluación del nivel
-                while ((list($nivelDato, $materiaDato, $criterioDato) = fgetcsv($gestor, 5000, ";")) !== false) {
-                    if ($primero) {
-                        //Se salta la cabecera
-                        $primero = false;
-                        continue;
+                while ((list($unidadDato, $indicadorDato) = fgetcsv($gestor, 5000, ";")) !== false) {
+                    //Si cambiamos de unidad hay que crear una unidad nueva.
+                    if ($unidadDato != $unidadAnterior) {
+                        $unidadAnterior = $unidadDato;
+                        $unidad = new Unidad();
+                        $unidad->setDescripcion($unidadDato);
+                        $unidad->setMateria($materia);
+                        $manager->persist($unidad);
                     }
-                    //Si cambiamos de materia hay que crear una materia nueva.
-                    if ($materiaDato != $materiaAnterior) {
-                        $materiaAnterior = $materiaDato;
-                        $materia = new Materia();
-                        $materia->setDescripcion($materiaDato);
-                        $materia->setNivel($nivel);
-                        $materia->setOptativa(false);
-                        $manager->persist($materia);
-                    }
-                    $criterio = new CriterioEvaluacion();
-                    $criterio->setDescripcion($criterioDato);
-                    $criterio->setMateria($materia);
-                    $manager->persist($criterio);
+                    $indicador = new Indicador();
+                    $indicador->setDescripcion($indicadorDato);
+                    $indicador->setUnidad($unidad);
+                    $manager->persist($indicador);
                 }
             }
             fclose($gestor);
