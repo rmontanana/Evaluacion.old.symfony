@@ -30,16 +30,20 @@ class MateriaRepository extends EntityRepository
      * Encuentra todos los indicadores de una materia ordenados por Unidad
      * @param Materia $materia
      * @return array Evaluacion\Appbundle\Indicador
-     */
-    public function findIndicadoresByMateria(Materia $materia)
+     */ /*i.id as id, i.descripcion as indicador, 
+                        i.minimo as minimo, i.competencia*/
+    public function findIndicadoresByMateria(Materia $materia, $competencia)
     {   
         $em = $this->getEntityManager();
-        $dql = "SELECT  u.descripcion as unidad, i.descripcion as indicador, i.minimo as minimo
+        $dql = "SELECT  u.descripcion as unidad, i
+                                               
                 FROM    AppBundle:Indicador i
                 JOIN    i.unidad u
-                WHERE   u.materia = :materia";
+                WHERE   u.materia = :materia AND
+                        i.competencia is null or i.competencia = :competencia" ;
         $consulta = $em->createQuery($dql);
         $consulta->setParameter('materia', $materia);
+        $consulta->setParameter('competencia', $competencia);
         $indicadores = $consulta->getResult();
         return $indicadores;
     }

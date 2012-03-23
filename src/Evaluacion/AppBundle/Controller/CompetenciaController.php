@@ -65,7 +65,7 @@ class CompetenciaController extends Controller
             //Obtiene todos los indicadores de la materia correspondiente.
             // TODO Crear un Repositorio para Materias que permita hacer esta consulta.
             $materia = $em->getRepository('AppBundle:Materia')->find($datos['Materia'][0]);
-            $indicadores = $em->getRepository('AppBundle:Materia')->findIndicadoresByMateria($materia);
+            $indicadores = $em->getRepository('AppBundle:Materia')->findIndicadoresByMateria($materia, $datos['Competencia']);
             $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
                        'datos' => $datos, 'indicadores' => $indicadores);
             return $this->render('AppBundle:Competencia:asignacionIndicador.html.twig', $param);

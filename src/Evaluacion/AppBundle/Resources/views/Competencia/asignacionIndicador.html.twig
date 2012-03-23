@@ -42,16 +42,22 @@
     <tbody>
         {% for indicador in indicadores %}
             <tr>
-                <td>{{ indicador.unidad }}</td>
+                <td><label id="{{ indicador.id }}" hidden></label>{{ indicador.unidad }}</td>
                 {% if indicador.minimo %}
-                    <td><bold>{{ indicador.indicador }}<bold></td>
+                    <td><bold>{{ indicador.descripcion }}<bold></td>
                 {% else %}
-                    <td>{{ indicador.indicador }}</td>
+                    <td>{{ indicador.descripcion }}</td>
                 {% endif %}
-                {% if indicador.minimo %}
-                    <td><button class="btn btn-primary" href="#"><i class="icon-ok icon-white"></i></buttonn></td>
+                {% if indicador.competencia == datos.competencia.id %}
+                    <td><button class="btn btn-primary" href="#" 
+                                onclick="asignaIndicador(0, {{ indicador.id }}, 
+                                                    {{ datos.Competencia.id }}">
+                        <i class="icon-ok icon-white"></i></buttonn></td>
                 {% else %}
-                    <td><button class="btn btn-danger" href="#"><i class="icon-remove icon-white"></i></buttonn></td>
+                    <td><button class="btn btn-danger" href="#" 
+                                onclick="asignaIndicador(1, {{ indicador.id }}, 
+                                                    {{ datos.Competencia.id }}">
+                         <i class="icon-remove icon-white"></i></buttonn></td>
                 {% endif %}
             </tr>
         {% endfor %}
