@@ -40,7 +40,8 @@ class MateriaRepository extends EntityRepository
                 FROM    AppBundle:Indicador i
                 JOIN    i.unidad u
                 WHERE   u.materia = :materia AND
-                        i.competencia is null or i.competencia = :competencia" ;
+                        i.competencia is null or i.competencia = :competencia
+                ORDER BY i.id" ;
         $consulta = $em->createQuery($dql);
         $consulta->setParameter('materia', $materia);
         $consulta->setParameter('competencia', $competencia);

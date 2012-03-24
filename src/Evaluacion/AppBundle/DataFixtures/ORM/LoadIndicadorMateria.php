@@ -35,7 +35,8 @@ class LoadIndicadorMateria implements FixtureInterface, OrderedFixtureInterface
   
     public function load(ObjectManager $manager)
     {
-        $niveles = array ('Primero' => array ('materia' => 'Matemáticas', 'archivo' => 'IndicadoresMatematicasPrimero.csv'), 
+        $niveles = array ('Primero' => array ('materia' => 'Matemáticas', 'archivo' => 'IndicadoresMatematicasPrimero.csv'),
+                          'Cuarto'  => array ('materia' => 'Informática', 'archivo' => 'IndicadoresInformaticaCuarto.csv')
                          );
         $directorio = getcwd()."/src/Evaluacion/AppBundle/DataFixtures/ORM/csv/";
         foreach ($niveles as $nivelDato => $informacion) {
@@ -47,7 +48,7 @@ class LoadIndicadorMateria implements FixtureInterface, OrderedFixtureInterface
             //echo "Abrimos archivo [".$directorio.$archivo."] de nivel [".$nivelDato."]\n";
             if (($gestor = fopen($directorio.$informacion['archivo'], "r")) !== false) {
                 //Guarda los criterios de evaluación del nivel
-                while ((list($unidadDato, $indicadorDato) = fgetcsv($gestor, 5000, ";")) !== false) {
+                while ((list($unidadDato, $indicadorDato, $minimoDato) = fgetcsv($gestor, 5000, ";")) !== false) {
                     //Si cambiamos de unidad hay que crear una unidad nueva.
                     if ($unidadDato != $unidadAnterior) {
                         $unidadAnterior = $unidadDato;
@@ -59,6 +60,11 @@ class LoadIndicadorMateria implements FixtureInterface, OrderedFixtureInterface
                     $indicador = new Indicador();
                     $indicador->setDescripcion($indicadorDato);
                     $indicador->setUnidad($unidad);
+                    if ($minimoDato == "S") {
+                        $indicador->setMinimo(true);
+                    } else {
+                        $indicador->setMinimo(false);
+                    }
                     $manager->persist($indicador);
                 }
             }
