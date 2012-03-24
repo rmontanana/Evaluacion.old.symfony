@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Evaluacion\AppBundle\Entity\Indicador
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Evaluacion\AppBundle\Entity\IndicadorRepository")
  */
 class Indicador
 {
@@ -134,7 +134,7 @@ class Indicador
      *
      * @param \Evaluacion\AppBundle\Entity\Competencia $competencia
      */
-    public function setCompetencia(\Evaluacion\AppBundle\Entity\Competencia $competencia)
+    public function setCompetencia(\Evaluacion\AppBundle\Entity\Competencia $competencia = null)
     {
         $this->competencia = $competencia;
     }

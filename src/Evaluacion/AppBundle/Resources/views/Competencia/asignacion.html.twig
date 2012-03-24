@@ -36,7 +36,7 @@ function rellenaMateria(id) {
                         $('#prueba').html(estado + items.join('')); 
 
                     },
-        error: function(peticion, textStatus, errorThrown) { $('#prueba').html(testStatus + errorThrown); }
+        error: function(peticion, textStatus, errorThrown) { $('#prueba').html(textStatus + errorThrown); }
     });
 };
 </script>

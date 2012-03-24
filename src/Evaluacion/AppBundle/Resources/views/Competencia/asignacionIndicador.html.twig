@@ -40,6 +40,9 @@
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td colspan="3" text-align="center"><h4><div id="resultado"></div></h4></td>
+        </tr>
         {% for indicador in indicadores %}
             <tr>
                 <td>{{ indicador.unidad }}</td>
@@ -48,17 +51,20 @@
                 {% else %}
                     <td>{{ indicador[0].descripcion }}</td>
                 {% endif %}
-                {% if indicador[0].competencia == datos.Competencia.descripcion %}
-                    <td><button class="btn btn-primary" href="#" 
-                                onclick="asignaIndicador(0, {{ indicador[0].id }}, 
-                                                    {{ datos.Competencia.id }}">
-                        <i class="icon-ok icon-white"></i></buttonn></td>
+                {# TODO falta por poner que la siguiente pregunta se haga por id en lugar de por descripción #}
+                {% if indicador[0].competencia != datos.Competencia.descripcion %}
+                    {% if indicador[0].competencia is not empty %}
+                        {% set clases = { 'boton': "btn btn-warning", 'icono': "icon-ok icon-white"} %}
+                    {% else %}
+                        {% set clases = { 'boton': "btn btn-primary", 'icono': "icon-ok icon-white"} %}
+                    {% endif %}
                 {% else %}
-                    <td><button class="btn btn-danger" href="#" 
-                                onclick="asignaIndicador(1, {{ indicador[0].id }}, 
-                                                    {{ datos.Competencia.id }}">
-                         <i class="icon-remove icon-white"></i></buttonn></td>
+                    {% set clases = { 'boton': "btn btn-danger", 'icono': "icon-remove icon-white"} %}
                 {% endif %}
+                <td><button class="{{ clases['boton'] }}" href="#" 
+                        onclick="asignaIndicador(this, {{ indicador[0].id }}, 
+                                            {{ datos.Competencia.id }})">
+                    <i class="{{ clases['icono'] }}"></i></button></td>
             </tr>
         {% endfor %}
     </tbody>
@@ -66,23 +72,31 @@
 
 <div id="prueba"> </div>
 <script type="text/javascript">
-function rellenaMateria(id) {
-    $('#prueba').html(id);
-    $.ajax({url: "{{ path('ajax_nivel') }}", type: 'POST', dataType: 'json', data: {id: id},
-        success: function (data, estado) { 
-                        var items = new Array();
-                        //$('#form_Materia').empty();
-                        items.push('<option value="">Selecciona Materia</option>');
-                        if (data.length > 0) {
-                            $.each(data,function(i,materia) {
-                                items.push('<option value="' + materia.id + '">' + materia.descripcion + "</option>");
-                            });
-                        }
-                        $('#form_Materia').html(items.join(''));
-                        $('#prueba').html(estado + items.join('')); 
-
+function asignaIndicador(boton, indicador, comp) {
+    var claseAsigna = "btn btn-primary";
+    var claseBorra = "btn btn-danger";
+    var claseOk = "icon-ok icon-white";
+    var claseX = "icon-remove icon-white";
+    
+    if (boton.className == claseBorra) {
+        //Desasigna el indicador de la competencia
+        competencia = null;
+        //Cambia el estilo para que ahora se pueda volver a asingar si se quiere
+        boton.className = claseAsigna;
+        boton.childNodes[1].className = claseOk;
+    } else {
+        //Asigna el indicador a la competencia
+        competencia = comp;        
+        //Cambia el estilo para que ahora se pueda desasignar si se quiere
+        boton.className = claseBorra;
+        boton.childNodes[1].className = claseX;
+    }
+    /*$('#prueba').html(id);*/
+    $.ajax({url: "{{ path('ajax_indicador') }}", type: 'POST', data: {indicador: indicador, competencia: competencia},
+        success: function (data, estado) {
+                        $('#resultado').html("-- Operación Ok --");
                     },
-        error: function(peticion, textStatus, errorThrown) { $('#prueba').html(testStatus + errorThrown); }
+        error: function(peticion, textStatus, errorThrown) { $('#resultado').html("*Operación Error" + textStatus + errorThrown); }
     });
 };
 </script>

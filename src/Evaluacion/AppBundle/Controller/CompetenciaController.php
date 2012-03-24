@@ -103,14 +103,42 @@ class CompetenciaController extends Controller
     public function ajaxNivel()
     {
         //return new Response(json_encode(array("hola" => $this->getRequest()->get('id'))));
+        //Si es una petición ajax continua
         if ($this->getRequest()->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getEntityManager();
             $materias = $em->getRepository('AppBundle:Materia')
-                    ->findByNivel($this->getRequest()->get('id'));
+                            ->findByNivel($this->getRequest()->get('id'));
+            //json_encode necesita un array
             foreach ($materias as $materia) {
                 $resp[]=array('id' => $materia->getId(), 'descripcion' => $materia->getDescripcion());
             }
             return new Response(json_encode($resp));
+        }
+    }
+    
+    /**
+     * @Route("/ajaxIndicador", name="ajax_indicador")
+     * @return string 
+     */
+    public function ajaxIndicador()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $indi = $this->getRequest()->get('indicador');
+            $compe = $this->getRequest()->get('competencia');
+            $em = $this->getDoctrine()->getEntityManager();
+            $indicador = $em->getRepository('AppBundle:Indicador')
+                            ->find($indi);
+            if ($compe == "null") {
+                $indicador->setCompetencia();
+            } else {
+                $competencia = $em->getRepository('AppBundle:Competencia')
+                                        ->find($compe);
+                $indicador->setCompetencia($competencia);
+            }
+            
+            $em->persist($indicador);
+            $em->flush();
+            return new Response("Ok");
         }
     }
 }
