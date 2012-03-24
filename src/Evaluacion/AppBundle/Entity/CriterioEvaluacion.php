@@ -45,11 +45,18 @@ class CriterioEvaluacion
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="string", length=100)
+     * @ORM\Column(name="descripcion", type="string", length=255)
      * @Assert\NotNull(message = "La descripción no puede estar vacía")
      */
     private $descripcion;
 
+    /**
+     * @var string $explicacion
+     * 
+     * @ORM\Column(name="explicacion", type="string", length=255)
+     */
+    private $explicacion;
+    
     /**
      * @var text $materia
      *
@@ -79,6 +86,16 @@ class CriterioEvaluacion
     }
 
     /**
+     * Set explicacion
+     * 
+     * @param string $explicacion 
+     */
+    public function setExplicacion($explicacion)
+    {
+        $this->explicacion = $explicacion;
+    }
+    
+    /**
      * Get descripcion
      *
      * @return string 
@@ -106,6 +123,15 @@ class CriterioEvaluacion
     public function getMateria()
     {
         return $this->materia;
+    }
+    
+    /**
+     * Get explicacion
+     * @return string
+     */
+    public function getExplicacion()
+    {
+        return $this->explicacion;
     }
     
     /**

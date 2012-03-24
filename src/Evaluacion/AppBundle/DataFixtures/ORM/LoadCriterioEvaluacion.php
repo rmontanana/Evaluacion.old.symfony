@@ -50,7 +50,7 @@ class LoadCriterioEvaluacion implements FixtureInterface, OrderedFixtureInterfac
             //echo "Abrimos archivo [".$directorio.$archivo."] de nivel [".$nivelDato."]\n";
             if (($gestor = fopen($directorio.$archivo, "r")) !== false) {
                 //Guarda los criterios de evaluación del nivel
-                while ((list($nivelDato, $materiaDato, $criterioDato) = fgetcsv($gestor, 5000, ";")) !== false) {
+                while ((list($nivelDato, $materiaDato, $criterioDato, $explicacionDato) = fgetcsv($gestor, 5000, ";")) !== false) {
                     if ($primero) {
                         //Se salta la cabecera
                         $primero = false;
@@ -67,6 +67,7 @@ class LoadCriterioEvaluacion implements FixtureInterface, OrderedFixtureInterfac
                     }
                     $criterio = new CriterioEvaluacion();
                     $criterio->setDescripcion($criterioDato);
+                    $criterio->setExplicacion($explicacionDato);
                     $criterio->setMateria($materia);
                     $manager->persist($criterio);
                 }
