@@ -77,7 +77,7 @@ function asignaIndicador(boton, indicador, comp) {
     var claseBorra = "btn btn-danger";
     var claseOk = "icon-ok icon-white";
     var claseX = "icon-remove icon-white";
-    
+    $('loading').show();
     if (boton.className == claseBorra) {
         //Desasigna el indicador de la competencia
         competencia = null;
@@ -98,6 +98,7 @@ function asignaIndicador(boton, indicador, comp) {
                     },
         error: function(peticion, textStatus, errorThrown) { $('#resultado').html("*Operación Error" + textStatus + errorThrown); }
     });
+    $('loading').hide();
 };
 </script>
 {% endblock %}
