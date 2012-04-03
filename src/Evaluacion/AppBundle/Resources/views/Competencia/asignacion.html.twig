@@ -18,10 +18,9 @@
     <input type="submit" />
 </form>
 
-<div id="prueba"> </div>
 <script type="text/javascript">
 function rellenaMateria(id) {
-    $('#prueba').html(id);
+    $('#loading').show();$("body").css("cursor", "progress");
     $.ajax({url: "{{ path('ajax_nivel') }}", type: 'POST', dataType: 'json', data: {id: id},
         success: function (data, estado) { 
                         var items = new Array();
@@ -33,10 +32,9 @@ function rellenaMateria(id) {
                             });
                         }
                         $('#form_Materia').html(items.join(''));
-                        $('#prueba').html(estado + items.join('')); 
-
+                        $('#loading').hide();$("body").css("cursor", "auto");
                     },
-        error: function(peticion, textStatus, errorThrown) { $('#prueba').html(textStatus + errorThrown); }
+        error: function(peticion, textStatus, errorThrown) { $('#loading').hide();$("body").css("cursor", "auto");}
     });
 };
 </script>

@@ -11,6 +11,19 @@
     vertical-align: middle;
 }
 
+/* Icono loading
+-------------------------------------------------- */
+img.oculto {
+    position: fixed;
+    left: 50%;
+    top: 35%;
+    display: none;
+    background: transparent url("../img/loading1.gif") no-repeat center;
+    z-index: 1000;
+    height: 128px;
+    width: 128px;
+    vertical-align: middle; 
+}
 
 /* Body and structure
 -------------------------------------------------- */

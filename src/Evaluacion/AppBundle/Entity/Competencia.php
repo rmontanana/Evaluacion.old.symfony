@@ -45,7 +45,7 @@ class Competencia
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="string", length=45)
+     * @ORM\Column(name="descripcion", type="string", length=100)
      * @Assert\NotNull(message = "La descripción no puede estar vacía")
      */
     private $descripcion;

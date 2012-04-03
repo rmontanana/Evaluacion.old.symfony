@@ -109,6 +109,7 @@ class CompetenciaController extends Controller
             $materias = $em->getRepository('AppBundle:Materia')
                             ->findByNivel($this->getRequest()->get('id'));
             //json_encode necesita un array
+            $resp="";
             foreach ($materias as $materia) {
                 $resp[]=array('id' => $materia->getId(), 'descripcion' => $materia->getDescripcion());
             }
