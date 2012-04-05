@@ -42,7 +42,7 @@
             <tr>
                 <td>{{ indicador.unidad }}</td>
                 {% if indicador[0].minimo %}
-                    <td><h4 id="{{ indicador[0].id }}" class="dblclick">{{ indicador[0].descripcion }}</h4></td>
+                    <td id="{{ indicador[0].id }}" class="dblclick"><b>{{ indicador[0].descripcion }}</b></td>
                 {% else %}
                     <td id="{{ indicador[0].id }}" class="dblclick">{{ indicador[0].descripcion }}</td>
                 {% endif %}
