@@ -151,6 +151,11 @@ class CompetenciaController extends Controller
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $valor = $this->getRequest()->get('value');
+            $anterior = $this->getRequest()->get('anterior');
+            // Si no se ha cambiado el valor de la cadena no hace nada
+            if ($anterior == $valor) {
+                return new Response($valor);
+            }
             $clave = $this->getRequest()->get('id');
             $em = $this->getDoctrine()->getEntityManager();
             $indicador = $em->getRepository('AppBundle:Indicador')

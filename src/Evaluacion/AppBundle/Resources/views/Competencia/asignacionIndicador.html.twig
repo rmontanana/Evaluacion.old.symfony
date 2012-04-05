@@ -67,6 +67,7 @@
 
 <div id="prueba"> </div>
 <script type="text/javascript">
+/* Permite que se asignen/des-asignen indicadores a una competencia */
 function asignaIndicador(boton, indicador, comp) {
     var claseAsigna = "btn btn-primary";
     var claseBorra = "btn btn-danger";
@@ -98,14 +99,14 @@ function asignaIndicador(boton, indicador, comp) {
         
     }).always(function() { $('#loading').hide();$("body").css("cursor", "auto"); });
 };
-</script>
-<script type="text/javascript" charset="utf-8">
 
+/* La función que se encarga de permitir la edición en línea */
 window.onload = function() {        
   $(".dblclick").editable("{{ path("ajax_editarIndicador") }}", { 
       indicator : "<img src='{{ asset('bundles/app/img/loading.gif') }}'>",
       method    : "POST",
       tooltip   : "doble-click para editar...",
+      submitdata: function(value) { return { "anterior": value }; },
       event     : "dblclick",
       style  : "inherit"
   });
