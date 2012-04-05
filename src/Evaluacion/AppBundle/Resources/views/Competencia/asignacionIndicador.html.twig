@@ -41,11 +41,12 @@
         {% for indicador in indicadores %}
             <tr>
                 <td>{{ indicador.unidad }}</td>
+                {% set clase = "dblclick" %}
                 {% if indicador[0].minimo %}
-                    <td id="{{ indicador[0].id }}" class="dblclick"><b>{{ indicador[0].descripcion }}</b></td>
-                {% else %}
-                    <td id="{{ indicador[0].id }}" class="dblclick">{{ indicador[0].descripcion }}</td>
+                    {# Si es un indicador mínimo lo pondremos en negrita #}
+                    {% set clase = "dblclick negrita" %}
                 {% endif %}
+                <td id="{{ indicador[0].id }}" class="{{ clase }}">{{ indicador[0].descripcion }}</td>
                 {# TODO falta por poner que la siguiente pregunta se haga por id en lugar de por descripción #}
                 {% if indicador[0].competencia != datos.Competencia.descripcion %}
                     {% if indicador[0].competencia is not empty %}
