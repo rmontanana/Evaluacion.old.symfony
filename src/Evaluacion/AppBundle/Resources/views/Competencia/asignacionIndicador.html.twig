@@ -31,11 +31,6 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <td colspan="3"><div id="resultado"></div>
-                <img src="{{ asset('bundles/app/img/263.gif') }}" alt="loading" id="loading2" class="oculto"/>
-            </td>
-        </tr>
-        <tr>
             <td><h3>Unidad Didáctica</td>
             <td><h3>Indicador</td>
             <td><h3>Acción</td>
@@ -47,9 +42,9 @@
             <tr>
                 <td>{{ indicador.unidad }}</td>
                 {% if indicador[0].minimo %}
-                    <td><h4>{{ indicador[0].descripcion }}</h4></td>
+                    <td><h4 id="{{ indicador[0].id }}" class="dblclick">{{ indicador[0].descripcion }}</h4></td>
                 {% else %}
-                    <td>{{ indicador[0].descripcion }}</td>
+                    <td id="{{ indicador[0].id }}" class="dblclick">{{ indicador[0].descripcion }}</td>
                 {% endif %}
                 {# TODO falta por poner que la siguiente pregunta se haga por id en lugar de por descripción #}
                 {% if indicador[0].competencia != datos.Competencia.descripcion %}
@@ -102,6 +97,18 @@ function asignaIndicador(boton, indicador, comp) {
         beforeSend: function() { $('#loading').show(); }*/
         
     }).always(function() { $('#loading').hide();$("body").css("cursor", "auto"); });
+};
+</script>
+<script type="text/javascript" charset="utf-8">
+
+window.onload = function() {        
+  $(".dblclick").editable("{{ path("ajax_editarIndicador") }}", { 
+      indicator : "<img src='{{ asset('bundles/app/img/loading.gif') }}'>",
+      method    : "POST",
+      tooltip   : "doble-click para editar...",
+      event     : "dblclick",
+      style  : "inherit"
+  });
 };
 </script>
 {% endblock %}

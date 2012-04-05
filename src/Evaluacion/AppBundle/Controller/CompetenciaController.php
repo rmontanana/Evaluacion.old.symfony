@@ -142,4 +142,26 @@ class CompetenciaController extends Controller
             return new Response("Ok");
         }
     }
+    
+    /**
+     * @Route("/ajaxEditarIndicador", name="ajax_editarIndicador")
+     * @return string
+     */
+    public function ajaxEditarIndicador()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $valor = $this->getRequest()->get('value');
+            $clave = $this->getRequest()->get('id');
+            $em = $this->getDoctrine()->getEntityManager();
+            $indicador = $em->getRepository('AppBundle:Indicador')
+                            ->find($clave);
+            if ($indicador->getDescripcion() != $valor) {
+                $indicador->setDescripcion($valor);
+                $em->persist($indicador);
+                $em->flush();
+            }
+            return new Response($valor);
+                
+        }
+    }
 }

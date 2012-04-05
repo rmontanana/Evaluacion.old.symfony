@@ -11,6 +11,12 @@
     vertical-align: middle;
 }
 
+/* Para la edición en línea de contenido
+-------------------------------------------------- */
+.edit {
+    color: gray;
+}
+
 /* Icono loading
 -------------------------------------------------- */
 img.oculto {
