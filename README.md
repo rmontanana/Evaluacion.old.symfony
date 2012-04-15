@@ -11,7 +11,7 @@ Al finalizar el trimestre por cada alumno se emitirá:
  
  1. Un informe de competencias.
 
- - Un informe de cada materia con los indicadores evaluados en las mismas a lo largo del trimestre.
+ 2. Un informe de cada materia con los indicadores evaluados en las mismas a lo largo del trimestre.
 
 La aplicación se desarrollará en lenguaje PHP con ayuda del framework Symfony2 y utilizando como soporte de base de datos MySQL. El desarrollo se publicará con licencia GPL v. 3 y se utilizará como repositorio de fuentes GitHub. Esto permitirá que el desarrollo pueda ser aprovechado por la comunidad y que se pueda colaborar en su mantenimiento y posible mejora.
 
