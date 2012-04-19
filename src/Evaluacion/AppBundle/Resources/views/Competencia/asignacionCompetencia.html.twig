@@ -1,0 +1,41 @@
+{# AppBundle/Competencia/asignacionCompetencia.html.twig #}
+
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block titulo %}{{ titulo }}{% endblock %} 
+
+{% block centro %}{{ centro }}{% endblock %}
+
+{% block usuario %}{{ usuario }}<a href="#">{{ enlaceUsuario }}</a>{% endblock %}
+
+{% block menu %}
+    {% include 'AppBundle::menu.html.twig' %}
+{% endblock %}
+
+{% block cuerpo %}
+<form action="{{ path('comp_asig') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input type="submit" />
+</form>
+
+<script type="text/javascript">
+function rellenaMateria(id) {
+    $('#loading').show();$("body").css("cursor", "progress");
+    $.ajax({url: "{{ path('ajax_nivel') }}", type: 'POST', dataType: 'json', data: {id: id},
+        success: function (data, estado) { 
+                        var items = new Array();
+                        //$('#form_Materia').empty();
+                        items.push('<option value="">Selecciona Materia</option>');
+                        if (data.length > 0) {
+                            $.each(data,function(i,materia) {
+                                items.push('<option value="' + materia.id + '=>' + materia.descripcion + '">' + materia.descripcion + "</option>");
+                            });
+                        }
+                        $('#form_Materia').html(items.join(''));
+                        $('#loading').hide();$("body").css("cursor", "auto");
+                    },
+        error: function(peticion, textStatus, errorThrown) { $('#loading').hide();$("body").css("cursor", "auto");}
+    });
+};
+</script>
+{% endblock %}

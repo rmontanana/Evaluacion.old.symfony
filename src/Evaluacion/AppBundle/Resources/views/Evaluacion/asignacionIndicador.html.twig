@@ -1,4 +1,4 @@
-{# AppBundle/Competencia/asignacionIndicador.html.twig #}
+{# AppBundle/Evaluacion/asignacionIndicador.html.twig #}
 
 {% extends 'AppBundle::layout.html.twig' %}
 
@@ -17,12 +17,12 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th><h2>Competencia</th>
+            <th><h2>Evaluación</th>
             <th><h2>Nivel</th>
             <th><h2>Materia</th>
         </tr>
         <tr>
-            <td><h3>{{ datos.Competencia.descripcion }}</td>
+            <td><h3>{{ datos.Evaluacion.descripcion }}</td>
             <td><h3>{{ datos.Nivel.descripcion }}</td>
             <td><h3>{{ datos.Materia[1] }}</td>
         </tr>
@@ -32,24 +32,17 @@
     <thead>
         <tr>
             <td><h3>Unidad Didáctica</td>
-            <td><h3>Indicador</td>
             <td><h3>Acción</td>
         </tr>
     </thead>
     <tbody>
         
-        {% for indicador in indicadores %}
+        {% for unidad in unidades %}
             <tr>
-                <td>{{ indicador.unidad }}</td>
-                {% set clase = "dblclick" %}
-                {% if indicador[0].minimo %}
-                    {# Si es un indicador mínimo lo pondremos en negrita #}
-                    {% set clase = "dblclick negrita" %}
-                {% endif %}
-                <td id="{{ indicador[0].id }}" class="{{ clase }}">{{ indicador[0].descripcion }}</td>
+                <td id="{{ unidad.id }}" class="dblclick">{{ unidad.descripcion }}</td>
                 {# TODO falta por poner que la siguiente pregunta se haga por id en lugar de por descripción #}
-                {% if indicador[0].competencia != datos.Competencia.descripcion %}
-                    {% if indicador[0].competencia is not empty %}
+                {% if unidad.evaluacion != datos.Evaluacion.id %}
+                    {% if unidad.evaluacion is not empty %}
                         {% set clases = { 'boton': "btn btn-warning", 'icono': "icon-ok icon-white"} %}
                     {% else %}
                         {% set clases = { 'boton': "btn btn-primary", 'icono': "icon-ok icon-white"} %}
@@ -58,8 +51,8 @@
                     {% set clases = { 'boton': "btn btn-danger", 'icono': "icon-remove icon-white"} %}
                 {% endif %}
                 <td><button class="{{ clases['boton'] }}" href="#" 
-                        onclick="asignaIndicador(this, {{ indicador[0].id }}, 
-                                            {{ datos.Competencia.id }})">
+                        onclick="asignaIndicador(this, {{ unidad.id }}, 
+                                            {{ datos.Evaluacion.id }})">
                     <i class="{{ clases['icono'] }}"></i></button></td>
             </tr>
         {% endfor %}
@@ -68,30 +61,30 @@
 
 <div id="prueba"> </div>
 <script type="text/javascript">
-/* Permite que se asignen/des-asignen indicadores a una competencia */
-function asignaIndicador(boton, indicador, comp) {
+/* Permite que se asignen/des-asignen unidades a una evaluacion */
+function asignaIndicador(boton, unidad, eval) {
     var claseAsigna = "btn btn-primary";
     var claseBorra = "btn btn-danger";
     var claseOk = "icon-ok icon-white";
     var claseX = "icon-remove icon-white";
     $('#loading').show();$("body").css("cursor", "progress");
     if (boton.className == claseBorra) {
-        //Desasigna el indicador de la competencia
-        competencia = null;
+        //Desasigna la unidad de la evaluacion
+        evaluacion = null;
         //Cambia el estilo para que ahora se pueda volver a asingar si se quiere
         boton.className = claseAsigna;
         boton.childNodes[1].className = claseOk;
     } else {
-        //Asigna el indicador a la competencia
-        competencia = comp;        
+        //Asigna la unidad a la evaluacion
+        evaluacion = eval
         //Cambia el estilo para que ahora se pueda desasignar si se quiere
         boton.className = claseBorra;
         boton.childNodes[1].className = claseX;
     }
     /*$('#prueba').html(id);*/
-    $.ajax({url: "{{ path('ajax_indicador') }}", 
+    $.ajax({url: "{{ path('ajax_unidad') }}", 
         type: 'POST', 
-        data: {indicador: indicador, competencia: competencia}, 
+        data: {unidad: unidad, evaluacion: evaluacion}, 
         /*success: function (data, estado) {
                         $('#resultado').html("-- Operación Ok --");
                     },*/
@@ -103,7 +96,7 @@ function asignaIndicador(boton, indicador, comp) {
 
 /* La función que se encarga de permitir la edición en línea */
 window.onload = function() {        
-  $(".dblclick").editable("{{ path("ajax_editarIndicador") }}", { 
+  $(".dblclick").editable("{{ path("ajax_editarUnidad") }}", { 
       indicator : "<img src='{{ asset('bundles/app/img/loading.gif') }}'>",
       method    : "POST",
       tooltip   : "doble-click para editar...",

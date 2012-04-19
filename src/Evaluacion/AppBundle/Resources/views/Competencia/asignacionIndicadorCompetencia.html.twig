@@ -1,0 +1,116 @@
+{# AppBundle/Competencia/asignacionIndicadorCompetencia.html.twig #}
+
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block titulo %}{{ titulo }}{% endblock %} 
+
+{% block centro %}{{ centro }}{% endblock %}
+
+{% block usuario %}{{ usuario }}<a href="#">{{ enlaceUsuario }}</a>{% endblock %}
+
+{% block menu %}
+    {% include 'AppBundle::menu.html.twig' %}
+{% endblock %}
+
+{% block cuerpo %}
+{# Cabecera con los datos #}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th><h2>Competencia</th>
+            <th><h2>Nivel</th>
+            <th><h2>Materia</th>
+        </tr>
+        <tr>
+            <td><h3>{{ datos.Competencia.descripcion }}</td>
+            <td><h3>{{ datos.Nivel.descripcion }}</td>
+            <td><h3>{{ datos.Materia[1] }}</td>
+        </tr>
+    </thead>
+</table>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <td><h3>Unidad Didáctica</h3></td>
+            <td><h3>Indicador</h3></td>
+            <td><h3>Acción</h3></td>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% for indicador in indicadores %}
+            <tr>
+                <td>{{ indicador.unidad }}</td>
+                {% set clase = "dblclick" %}
+                {% if indicador[0].minimo %}
+                    {# Si es un indicador mínimo lo pondremos en negrita #}
+                    {% set clase = "dblclick negrita" %}
+                {% endif %}
+                <td id="{{ indicador[0].id }}" class="{{ clase }}">{{ indicador[0].descripcion }}</td>
+                {# TODO falta por poner que la siguiente pregunta se haga por id en lugar de por descripción #}
+                {% if indicador[0].competencia != datos.Competencia.descripcion %}
+                    {% if indicador[0].competencia is not empty %}
+                        {% set clases = { 'boton': "btn btn-warning", 'icono': "icon-ok icon-white"} %}
+                    {% else %}
+                        {% set clases = { 'boton': "btn btn-primary", 'icono': "icon-ok icon-white"} %}
+                    {% endif %}
+                {% else %}
+                    {% set clases = { 'boton': "btn btn-danger", 'icono': "icon-remove icon-white"} %}
+                {% endif %}
+                <td><button class="{{ clases['boton'] }}" href="#" 
+                        onclick="asignaIndicador(this, {{ indicador[0].id }}, 
+                                            {{ datos.Competencia.id }})">
+                    <i class="{{ clases['icono'] }}"></i></button></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div id="prueba"> </div>
+<script type="text/javascript">
+/* Permite que se asignen/des-asignen indicadores a una competencia */
+function asignaIndicador(boton, indicador, comp) {
+    var claseAsigna = "btn btn-primary";
+    var claseBorra = "btn btn-danger";
+    var claseOk = "icon-ok icon-white";
+    var claseX = "icon-remove icon-white";
+    $('#loading').show();$("body").css("cursor", "progress");
+    if (boton.className == claseBorra) {
+        //Desasigna el indicador de la competencia
+        competencia = null;
+        //Cambia el estilo para que ahora se pueda volver a asingar si se quiere
+        boton.className = claseAsigna;
+        boton.childNodes[1].className = claseOk;
+    } else {
+        //Asigna el indicador a la competencia
+        competencia = comp;        
+        //Cambia el estilo para que ahora se pueda desasignar si se quiere
+        boton.className = claseBorra;
+        boton.childNodes[1].className = claseX;
+    }
+    /*$('#prueba').html(id);*/
+    $.ajax({url: "{{ path('ajax_indicador') }}", 
+        type: 'POST', 
+        data: {indicador: indicador, competencia: competencia}, 
+        /*success: function (data, estado) {
+                        $('#resultado').html("-- Operación Ok --");
+                    },*/
+        error: function(peticion, textStatus, errorThrown) { $('#resultado').html("*Operación Error" + textStatus + errorThrown); } /*,
+        beforeSend: function() { $('#loading').show(); }*/
+        
+    }).always(function() { $('#loading').hide();$("body").css("cursor", "auto"); });
+};
+
+/* La función que se encarga de permitir la edición en línea */
+window.onload = function() {        
+  $(".dblclick").editable("{{ path("ajax_editarIndicador") }}", { 
+      indicator : "<img src='{{ asset('bundles/app/img/loading.gif') }}'>",
+      method    : "POST",
+      tooltip   : "doble-click para editar...",
+      submitdata: function(value) { return { "anterior": value }; },
+      event     : "dblclick",
+      style  : "inherit"
+  });
+};
+</script>
+{% endblock %}

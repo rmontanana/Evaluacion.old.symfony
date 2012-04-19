@@ -1,4 +1,4 @@
-{# AppBundle/Competencia/asignacion.html.twig #}
+{# AppBundle/Evaluacion/asignacion.html.twig #}
 
 {% extends 'AppBundle::layout.html.twig' %}
 
@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block cuerpo %}
-<form action="{{ path('comp_asig') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('eval_asig') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <input type="submit" />
 </form>

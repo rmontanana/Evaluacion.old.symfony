@@ -32,7 +32,7 @@ class MateriaRepository extends EntityRepository
      * @return array Evaluacion\Appbundle\Indicador
      */ /*i.id as id, i.descripcion as indicador, 
                         i.minimo as minimo, i.competencia*/
-    public function findIndicadoresByMateria(Materia $materia, $competencia)
+    public function findIndicadoresByMateria(Materia $materia)
     {   
         $em = $this->getEntityManager();
         $dql = "SELECT  u.descripcion as unidad, i
@@ -50,5 +50,29 @@ class MateriaRepository extends EntityRepository
         $indicadores = $consulta->getResult();
         return $indicadores;
     }
+    
+    /**
+     * Encuentra todas las unidades didácticas de una materia ordenados por Unidad
+     * @param Materia $materia
+     * @return array Evaluacion\Appbundle\Unidad
+     */ /*i.id as id, i.descripcion as indicador, 
+                        i.minimo as minimo, i.competencia*/
+    public function findUnidadesByMateria(Materia $materia)
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT  u                                               
+                FROM    AppBundle:Unidad u
+                WHERE   u.materia = :materia 
+                ORDER BY u.id" ;
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('materia', $materia);
+        /* $consulta->setParameter('competencia', $competencia);
+         * AND
+                        i.competencia is null or i.competencia = :competencia
+         */
+        $unidades = $consulta->getResult();
+        return $unidades;
+    }
+    
 }
 

@@ -49,12 +49,17 @@ class Unidad
     private $descripcion;
 
     /**
-     * @var string $materia
+     * @var integer $materia
      *
      * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Materia")
      */
     private $materia;
-
+    /**
+     * @var integer $evaluacion
+     *
+     * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Evaluacion")
+     */
+    private $evaluacion;
 
     /**
      * Get id
@@ -104,5 +109,25 @@ class Unidad
     public function getMateria()
     {
         return $this->materia;
+    }
+    
+    /**
+     * Set materia
+     *
+     * @param \Evaluacion\AppBundle\Entity\Evaluacion $evaluacion
+     */
+    public function setEvaluacion($evaluacion)
+    {
+        $this->evaluacion = $evaluacion;
+    }
+    
+    /**
+     * Get evaluacion
+     *
+     * @return \Evaluacion\AppBundle\Entity\Evaluacion
+     */
+    public function getEvaluacion()
+    {
+        return $this->evaluacion;
     }
 }

@@ -1,6 +1,6 @@
 AppBundle_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: AppBundle:Default:index }
-competencia_routing:
+appBundle_routing:
     resource: "@AppBundle/Controller"
     type:     annotation

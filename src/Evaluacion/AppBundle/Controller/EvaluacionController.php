@@ -1,7 +1,7 @@
 <?php
 /* ***************************************************************************
- * AppBundle/Controller/CompetenciaController
- * Controlador para gestionar las competencias
+ * AppBundle/Controller/EvaluacionController
+ * Controlador para gestionar las evaluaciones
  * (C) Copyright 2012 Ricardo Montañana <rmontanana@gmail.com>
  * This file is part of Evaluacion.
  * ***************************************************************************
@@ -31,18 +31,19 @@ use Symfony\Component\Form\Event\DataEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Evaluacion\AppBundle\Util\Util;
 use Evaluacion\AppBundle\Entity\Competencia;
-use Evaluacion\AppBundle\Entity\Indicador;
+use Evaluacion\AppBundle\Entity\Unidad;
 use Evaluacion\AppBundle\Entity\Materia;
 use Evaluacion\AppBundle\Entity\Nivel;
 
 
 /**
- * @Route("/comp") 
+ * @Route("/eval") 
  */
-class CompetenciaController extends Controller
+class EvaluacionController extends Controller
 {
     /**
-     * @Route("/asig", name="comp_asig")
+     * Vamos a asignar las unidades didácticas a las evaluaciones
+     * @Route("/asig", name="eval_asig")
      * @return string 
      */
     public function AsignacionAction()
@@ -62,21 +63,23 @@ class CompetenciaController extends Controller
             //$this->container->get('logger')->debug("datos = ".print_r($datos));
             //Arregla el dato que viene de la materia.
             $datos['Materia'] = explode('=>', $datos['Materia']);
+            //$this->container->get('logger')->debug("id materia=".$datos['Materia'][0]);
             //Obtiene todos los indicadores de la materia correspondiente.
             // TODO Crear un Repositorio para Materias que permita hacer esta consulta.
-            $materia = $em->getRepository('AppBundle:Materia')->find($datos['Materia'][0]);
-            $indicadores = $em->getRepository('AppBundle:Materia')->findIndicadoresByMateria($materia);
+            $codMateria = $datos['Materia'][0];
+            $materia = $em->getRepository('AppBundle:Materia')->find($codMateria);
+            $unidades = $em->getRepository('AppBundle:Materia')->findUnidadesByMateria($materia);
             //$this->container->get('logger')->debug("datos = ".print_r($indicadores));
             $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'datos' => $datos, 'indicadores' => $indicadores);
-            return $this->render('AppBundle:Competencia:asignacionIndicadorCompetencia.html.twig', $param);
+                       'datos' => $datos, 'unidades' => $unidades);
+            return $this->render('AppBundle:Evaluacion:asignacionIndicador.html.twig', $param);
         }
         
-        return $this->render('AppBundle:Competencia:asignacionCompetencia.html.twig', $param);
+        return $this->render('AppBundle:Evaluacion:asignacion.html.twig', $param);
     }
     
     /**
-     * Crea el formulario para seleccionar: nivel-materia-competencia
+     * Crea el formulario para seleccionar: nivel-materia-evaluacion
      * @return formulario 
      */
     private function creaFormulario()
@@ -87,7 +90,7 @@ class CompetenciaController extends Controller
             ->add('Nivel', 'entity', array('class' => 'AppBundle:Nivel', 'empty_value' => 'Selecciona Nivel',
                                            'attr'=> array("onchange" => "rellenaMateria(this.value);")))
             ->add('Materia', 'choice', array('empty_value' => 'Selecciona Materia'))
-            ->add('Competencia', 'entity', array('class' => 'AppBundle:Competencia',
+            ->add('Evaluacion', 'entity', array('class' => 'AppBundle:Evaluacion',
                                                  'query_builder' => function (EntityRepository $er) {
                                                                     $qb = $er->createQueryBuilder('c')->orderBy('c.descripcion','ASC');
                                                                     return $qb;
@@ -96,58 +99,39 @@ class CompetenciaController extends Controller
         return $form;
     }
     
-    /** 
-     * @Route("/ajaxNivel", name="ajax_nivel")
-     * @return string
-     */
-    public function ajaxNivel()
-    {
-        //return new Response(json_encode(array("hola" => $this->getRequest()->get('id'))));
-        //Si es una petición ajax continua
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $materias = $em->getRepository('AppBundle:Materia')
-                            ->findByNivel($this->getRequest()->get('id'));
-            //json_encode necesita un array
-            $resp="";
-            foreach ($materias as $materia) {
-                $resp[]=array('id' => $materia->getId(), 'descripcion' => $materia->getDescripcion());
-            }
-            return new Response(json_encode($resp));
-        }
-    }
-    
     /**
-     * @Route("/ajaxIndicador", name="ajax_indicador")
+     * @Route("/ajaxUnidad", name="ajax_unidad")
      * @return string 
      */
-    public function ajaxIndicador()
+    public function ajaxUnidad()
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
-            $indi = $this->getRequest()->get('indicador');
-            $compe = $this->getRequest()->get('competencia');
+            $unid = $this->getRequest()->get('unidad');
+            $evaluac = $this->getRequest()->get('evaluacion');
             $em = $this->getDoctrine()->getEntityManager();
-            $indicador = $em->getRepository('AppBundle:Indicador')
-                            ->find($indi);
-            if ($compe == "null") {
-                $indicador->setCompetencia();
+            $unidad = $em->getRepository('AppBundle:Unidad')
+                            ->find($unid);
+            if ($evaluac == "null") {
+                $unidad->setEvaluacion();
+                // TODO Hay que eliminar todas las asignaciones de indicadores
             } else {
-                $competencia = $em->getRepository('AppBundle:Competencia')
-                                        ->find($compe);
-                $indicador->setCompetencia($competencia);
+                $evaluacion = $em->getRepository('AppBundle:Evaluacion')
+                                        ->find($evaluac);
+                $unidad->setCompetencia($evaluacion);
+                // TODO Hay que establecer todas las asignaciones de indicadores
             }
             
-            $em->persist($indicador);
+            $em->persist($unidad);
             $em->flush();
             return new Response("Ok");
         }
     }
     
     /**
-     * @Route("/ajaxEditarIndicador", name="ajax_editarIndicador")
+     * @Route("/ajaxEditarUnidad", name="ajax_editarUnidad")
      * @return string
      */
-    public function ajaxEditarIndicador()
+    public function ajaxEditarUnidad()
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $valor = $this->getRequest()->get('value');
@@ -158,11 +142,11 @@ class CompetenciaController extends Controller
             }
             $clave = $this->getRequest()->get('id');
             $em = $this->getDoctrine()->getEntityManager();
-            $indicador = $em->getRepository('AppBundle:Indicador')
+            $unidad = $em->getRepository('AppBundle:Unidad')
                             ->find($clave);
-            if ($indicador->getDescripcion() != $valor) {
-                $indicador->setDescripcion($valor);
-                $em->persist($indicador);
+            if ($unidad->getDescripcion() != $valor) {
+                $unidad->setDescripcion($valor);
+                $em->persist($unidad);
                 $em->flush();
             }
             return new Response($valor);
