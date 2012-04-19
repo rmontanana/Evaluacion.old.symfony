@@ -41,7 +41,7 @@
             <tr>
                 <td id="{{ unidad.id }}" class="dblclick">{{ unidad.descripcion }}</td>
                 {# TODO falta por poner que la siguiente pregunta se haga por id en lugar de por descripción #}
-                {% if unidad.evaluacion != datos.Evaluacion.id %}
+                {% if unidad[0].evaluacion != datos.Evaluacion.id %}
                     {% if unidad.evaluacion is not empty %}
                         {% set clases = { 'boton': "btn btn-warning", 'icono': "icon-ok icon-white"} %}
                     {% else %}
@@ -51,7 +51,7 @@
                     {% set clases = { 'boton': "btn btn-danger", 'icono': "icon-remove icon-white"} %}
                 {% endif %}
                 <td><button class="{{ clases['boton'] }}" href="#" 
-                        onclick="asignaIndicador(this, {{ unidad.id }}, 
+                        onclick="asignaUnidad(this, {{ unidad.id }}, 
                                             {{ datos.Evaluacion.id }})">
                     <i class="{{ clases['icono'] }}"></i></button></td>
             </tr>
@@ -62,7 +62,7 @@
 <div id="prueba"> </div>
 <script type="text/javascript">
 /* Permite que se asignen/des-asignen unidades a una evaluacion */
-function asignaIndicador(boton, unidad, eval) {
+function asignaUnidad(boton, unidad, eval) {
     var claseAsigna = "btn btn-primary";
     var claseBorra = "btn btn-danger";
     var claseOk = "icon-ok icon-white";

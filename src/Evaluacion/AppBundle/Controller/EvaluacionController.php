@@ -69,6 +69,7 @@ class EvaluacionController extends Controller
             $codMateria = $datos['Materia'][0];
             $materia = $em->getRepository('AppBundle:Materia')->find($codMateria);
             $unidades = $em->getRepository('AppBundle:Materia')->findUnidadesByMateria($materia);
+            //$this->container->get('logger')->debug("unidades = ".print_r($unidades));
             //$this->container->get('logger')->debug("datos = ".print_r($indicadores));
             $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
                        'datos' => $datos, 'unidades' => $unidades);
@@ -117,7 +118,7 @@ class EvaluacionController extends Controller
             } else {
                 $evaluacion = $em->getRepository('AppBundle:Evaluacion')
                                         ->find($evaluac);
-                $unidad->setCompetencia($evaluacion);
+                $unidad->setEvaluacion($evaluacion);
                 // TODO Hay que establecer todas las asignaciones de indicadores
             }
             
