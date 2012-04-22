@@ -114,14 +114,15 @@ class EvaluacionController extends Controller
                             ->find($unid);
             if ($evaluac == "null") {
                 $unidad->setEvaluacion();
+                $unidad->setIndicadoresEvaluacion(null);
                 // TODO Hay que eliminar todas las asignaciones de indicadores
             } else {
                 $evaluacion = $em->getRepository('AppBundle:Evaluacion')
                                         ->find($evaluac);
                 $unidad->setEvaluacion($evaluacion);
+                $em->getRepository('AppBundle:Unidad')->setIndicadoresEvaluacion($unidad, $evaluacion);
                 // TODO Hay que establecer todas las asignaciones de indicadores
-            }
-            
+            }            
             $em->persist($unidad);
             $em->flush();
             return new Response("Ok");

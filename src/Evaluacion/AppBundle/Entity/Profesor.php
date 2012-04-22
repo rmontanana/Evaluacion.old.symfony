@@ -289,10 +289,31 @@ class Profesor implements UserInterface
      * Add grupos
      *
      * @param Evaluacion\AppBundle\Entity\Grupo $grupo
+     * @return boolean
      */
     public function addGrupo(\Evaluacion\AppBundle\Entity\Grupo $grupo)
     {
-        $this->grupos[] = $grupo;
+        if (!$this->hasGrupo($grupo)) {
+            $this->grupos[] = $grupo;
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Averigua si el profesor ya tiene asignado este grupo
+     * 
+     * @param Evaluacion\AppBundle\Entity\Grupo $grupo
+     * @return boolean
+     */
+    public function hasGrupo(\Evaluacion\AppBundle\Entity\Grupo $grupo)
+    {
+        foreach ($this->grupos as $valor) {
+            if ($valor->getId() == $grupo->getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

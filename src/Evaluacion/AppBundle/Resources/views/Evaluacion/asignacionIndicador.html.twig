@@ -41,7 +41,7 @@
             <tr>
                 <td id="{{ unidad.id }}" class="dblclick">{{ unidad.descripcion }}</td>
                 {# TODO falta por poner que la siguiente pregunta se haga por id en lugar de por descripción #}
-                {% if unidad[0].evaluacion != datos.Evaluacion.id %}
+                {% if unidad.evaluacion != datos.Evaluacion %}
                     {% if unidad.evaluacion is not empty %}
                         {% set clases = { 'boton': "btn btn-warning", 'icono': "icon-ok icon-white"} %}
                     {% else %}

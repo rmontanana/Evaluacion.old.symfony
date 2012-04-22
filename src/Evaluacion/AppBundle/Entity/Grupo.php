@@ -134,10 +134,30 @@ class Grupo
      * Add profesores
      *
      * @param Evaluacion\AppBundle\Entity\Profesor $profesor
+     * @return boolean
      */
     public function addProfesor(\Evaluacion\AppBundle\Entity\Profesor $profesor)
     {
-        $this->profesores[] = $profesor;
+        if (!$this->hasProfesor($profesor)){
+            $this->profesores[] = $profesor;
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Averigua si el profesor ya está en este grupo
+     * @param Evaluacion\AppBundle\Entity\Profesor $profesor
+     * @return boolean
+     */
+    public function hasProfesor(\Evaluacion\AppBundle\Entity\Profesor $profesor)
+    {
+        foreach($this->profesores as $value) {
+            if ($value->getId() == $profesor->getId()) {
+                return true;
+            }            
+        }
+        return false;
     }
 
     /**

@@ -77,7 +77,24 @@ class Indicador
      * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Unidad")
      */
     private $unidad;
+    
+    /**
+     * Evaluaciones en las que está evaluándose este indicador.
+     * 
+     * @var \Doctrine\Common\Collections\ArrrayCollections $evaluaciones
+     * 
+     * @ORM\ManyToMany(targetEntity="Evaluacion\AppBundle\Entity\Evaluacion", inversedBy="indicadores", cascade={"persist"})
+     */
+    private $evaluaciones;
 
+    /**
+     * Constructor
+     * @return type \Evaluacion\AppBundle\Entity\Indicador
+     */
+    public function __construct()
+    {
+        $this->evaluaciones = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -196,6 +213,63 @@ class Indicador
     public function __toString()
     {
         return $this->descripcion;
+    }
+    
+    /**
+     * Add evaluaciones
+     *
+     * @param Evaluacion\AppBundle\Entity\Evaluacion $evaluacion
+     * @return boolean
+     */
+    public function addEvaluacion(\Evaluacion\AppBundle\Entity\Evaluacion $evaluacion)
+    {
+        if (!$this->hasEvaluacion($evaluacion, false)) {
+            $this->evaluaciones[] = $evaluacion;
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Averigua si el indicador ya está definido en esa evaluación y puede borrarlo
+     * 
+     * @param Evaluacion\AppBundle\Entity\Evaluacion $evaluacion
+     * @return boolean
+     */
+    public function hasEvaluacion(\Evaluacion\AppBundle\Entity\Evaluacion $evaluacion, $borrar = false)
+    {
+        foreach ($this->evaluaciones as $valor) {
+            if ($valor->getId() == $evaluacion->getId()) {
+                if ($borrar) {
+                    $this->evaluaciones->removeElement($evaluacion);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Elimina una evaluación del indicador
+     * 
+     * @param Evaluacion\AppBundle\Entity\Evaluacion $evaluacion 
+     */
+    public function removeEvaluacion(\Evaluacion\AppBundle\Entity\Evaluacion $evaluacion)
+    {
+        if($this->hasEvaluacion($evaluacion,true)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get evaluaciones
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection 
+     */
+    public function getEvaluaciones()
+    {
+        return $this->evaluaciones;
     }
     
 }

@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Evaluacion\AppBundle\Entity\Unidad
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Evaluacion\AppBundle\Entity\UnidadRepository")
  */
 class Unidad
 {
@@ -60,6 +60,12 @@ class Unidad
      * @ORM\ManyToOne(targetEntity="Evaluacion\AppBundle\Entity\Evaluacion")
      */
     private $evaluacion;
+    
+    /**
+     * 
+     * @ORM\OneToMany(targetEntity="Evaluacion\AppBundle\Entity\Indicador" mappedBy="unidad") 
+     */
+    private $indicadores;
 
     /**
      * Get id

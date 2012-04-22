@@ -1,7 +1,7 @@
 <?php
 /* ***************************************************************************
  * AppBundle/Entity/MateriaRepository
- * Controlador para gestionar las competencias
+ * Controlador para gestionar las Materias
  * (C) Copyright 2012 Ricardo Montañana <rmontanana@gmail.com>
  * This file is part of Evaluacion.
  * ***************************************************************************
