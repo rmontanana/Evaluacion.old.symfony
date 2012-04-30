@@ -1,0 +1,31 @@
+
+{# AppBundle/Competencia/asignacionIndicadorCompetencia.html.twig #}
+
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block titulo %}{{ titulo }}{% endblock %} 
+
+{% block centro %}{{ centro }}{% endblock %}
+
+{% block usuario %}{{ usuario }}<a href="#">{{ enlaceUsuario }}</a>{% endblock %}
+
+{% block menu %}
+    {% include 'AppBundle::menu.html.twig' %}
+{% endblock %}
+
+{% block cuerpo %}
+{# Cabecera con los datos #}
+<table>
+        <tr>
+            <th><h2>Id</th>
+            <th><h2>Nombre</th>
+            <th><h2>Email</th>
+        </tr>
+        <tr>
+            <td><h3>{{ datos.Profesor.Id }}</td>
+            <td><h3>{{ datos.Profesor.Nombre }}</td>
+            <td><h3>{{ datos.Profesor.Email }}</td>
+        </tr>
+</table>
+{% endblock %}
+
