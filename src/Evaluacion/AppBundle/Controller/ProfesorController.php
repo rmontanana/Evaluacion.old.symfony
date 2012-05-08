@@ -52,7 +52,7 @@ class ProfesorController extends Controller
         $profesores=$em->getReposytory('AppBundle:Profesor')->findAll();
         $datos['Profesor'] = explode('=>', $datos['Profesor']);
         $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'datos' => $datos, 'unidades' => $unidades);
+                       'datos' => $datos, 'prfesores' => $profesores);
         return $this->render('AppBundle:Evaluacion:Profesor.html.twig', $param);
     }
 }
