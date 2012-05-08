@@ -48,12 +48,11 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $menu = Util::getMenu();
         $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
-        $centro="I.E.S.O. Pascual Serrano";
-        $profesores=$em->getReposytory('AppBundle:Profesor')->findAll();
-        $datos['Profesor'] = explode('=>', $datos['Profesor']);
+        $centro = "I.E.S.O. Pascual Serrano";
+        $profesores = $em->getRepository('AppBundle:Profesor')->findAll();
         $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'datos' => $datos, 'prfesores' => $profesores);
-        return $this->render('AppBundle:Evaluacion:Profesor.html.twig', $param);
+                       'profesores' => $profesores);
+        return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
     }
 }
 

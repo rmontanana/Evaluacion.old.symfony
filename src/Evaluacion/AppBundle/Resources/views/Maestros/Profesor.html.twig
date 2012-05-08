@@ -22,13 +22,15 @@
         <th><h2>NOMBRE</th>
         <th><h2>EMAIL</th>
     </tr>
-    <tr>
+<tr>
         {% for profesor in profesores %}
+            <tr>
             <td><h3>{{profesor.id}}</td>
             <td><h3>{{profesor.nombre}}</td>
             <td><h3>{{profesor.email}}</td>
+            </tr>
         {% endfor %}
-    </tr>
+</tr>
     </thead>
 </table>
 {% endblock %}
