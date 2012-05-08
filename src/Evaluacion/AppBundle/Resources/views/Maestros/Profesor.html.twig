@@ -1,5 +1,5 @@
 
-{# AppBundle/Competencia/asignacionIndicadorCompetencia.html.twig #}
+{# AppBundle/Maestros/Profesor.html.twig #}
 
 {% extends 'AppBundle::layout.html.twig' %}
 
@@ -15,17 +15,22 @@
 
 {% block cuerpo %}
 {# Cabecera con los datos #}
-<table>
-        <tr>
-            <th><h2>Id</th>
-            <th><h2>Nombre</th>
-            <th><h2>Email</th>
-        </tr>
-        <tr>
-            <td><h3>{{ datos.Profesor.Id }}</td>
-            <td><h3>{{ datos.Profesor.Nombre }}</td>
-            <td><h3>{{ datos.Profesor.Email }}</td>
-        </tr>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th><h2>ID</th>
+        <th><h2>NOMBRE</th>
+        <th><h2>EMAIL</th>
+    </tr>
+    <tr>
+        {% for profesor in profesores %}
+            <td><h3>{{profesor.id}}</td>
+            <td><h3>{{profesor.nombre}}</td>
+            <td><h3>{{profesor.email}}</td>
+        {% endfor %}
+    </tr>
+    </thead>
 </table>
 {% endblock %}
+
 

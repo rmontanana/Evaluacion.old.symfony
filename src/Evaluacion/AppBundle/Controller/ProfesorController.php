@@ -1,7 +1,7 @@
 <?php
 /* ***************************************************************************
- * AppBundle/Controller/MaestrosController
- * Controlador para gestionar los Maestros
+ * AppBundle/Controller/ProfesorController
+ * Controlador para gestionar los Profesores
  * (C) Copyright 2012 Ricardo MontaÃ±ana <rmontanana@gmail.com>
  * This file is part of Evaluacion.
  * ***************************************************************************
@@ -36,7 +36,7 @@ use Evaluacion\AppBundle\Entity\Profesor;
 /**
  * @Route("/prof") 
  */
-class MaestrosController extends Controller
+class ProfesorController extends Controller
 {
      /**
      * Vamos a hacer un listado de los profesores
@@ -47,19 +47,12 @@ class MaestrosController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $menu = Util::getMenu();
-        $usuario = "Ricardo MontaÃ±ana GÃ³mez"; $enlace="(salir)";
+        $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
         $centro="I.E.S.O. Pascual Serrano";
-        $form = $this->creaFormulario();
-        $request = $this->getRequest();
-        if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
-            $datos = $form->getData();
-
-            $datos['Profesor'] = explode('=>', $datos['Profesor']);
-
-            $param = array('titulo' => 'AsignaciÃ³n', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+        $profesores=$em->getReposytory('AppBundle:Profesor')->findAll();
+        $datos['Profesor'] = explode('=>', $datos['Profesor']);
+        $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
                        'datos' => $datos, 'unidades' => $unidades);
-        }
         return $this->render('AppBundle:Evaluacion:Profesor.html.twig', $param);
     }
 }
