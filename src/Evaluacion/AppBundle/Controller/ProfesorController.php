@@ -54,5 +54,43 @@ class ProfesorController extends Controller
                        'profesores' => $profesores);
         return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
     }
+    
+         /**
+     * Vamos a hacer un listado de los profesores
+     * @Route("/modNombre", name="ajax_editarProfesor")
+     * @return string 
+     */
+    public function ajaxEditarProfesor()
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $valor = $this->getRequest()->get('value');
+            $anterior = $this->getRequest()->get('anterior');
+            $campo = $this->getRequest()->get('campo');
+            // Si no se ha cambiado el valor de la cadena no hace nada
+            if ($anterior == $valor) {
+                return new Response($valor);
+            }
+            $clave = $this->getRequest()->get('id');
+            $em = $this->getDoctrine()->getEntityManager();
+            $profesor = $em->getRepository('AppBundle:Profesor')
+                            ->find($clave);
+            if ($campo != 'email') {
+                if ($profesor->getNombre() != $valor) {
+                    $profesor->setNombre($valor);
+                    $em->persist($profesor);
+                    $em->flush();
+                }
+            }
+            elseif ($campo != 'nombre') {
+                if ($profesor->getEmail() != $valor) {
+                    $profesor->setEmail($valor);
+                    $em->persist($profesor);
+                    $em->flush();
+                }
+            }
+            return new Response($valor);
+                
+        }
+    }
 }
 
