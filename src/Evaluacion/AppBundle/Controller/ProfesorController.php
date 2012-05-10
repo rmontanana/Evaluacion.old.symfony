@@ -38,7 +38,7 @@ use Evaluacion\AppBundle\Entity\Profesor;
  */
 class ProfesorController extends Controller
 {
-     /**
+    /**
      * Vamos a hacer un listado de los profesores
      * @Route("/list", name="list_prof")
      * @return string 
@@ -55,7 +55,7 @@ class ProfesorController extends Controller
         return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
     }
     
-         /**
+    /**
      * Vamos a hacer un listado de los profesores
      * @Route("/modNombre", name="ajax_editarProfesor")
      * @return string 
@@ -70,26 +70,25 @@ class ProfesorController extends Controller
             if ($anterior == $valor) {
                 return new Response($valor);
             }
-            $clave = $this->getRequest()->get('id');
+            // Separamos el campo del identificador.
+            list($campo, $clave) = explode(".", $this->getRequest()->get('id'));
             $em = $this->getDoctrine()->getEntityManager();
             $profesor = $em->getRepository('AppBundle:Profesor')
                             ->find($clave);
-            if ($campo != 'email') {
+            if ($campo == 'nombre') {
                 if ($profesor->getNombre() != $valor) {
                     $profesor->setNombre($valor);
                     $em->persist($profesor);
                     $em->flush();
                 }
-            }
-            elseif ($campo != 'nombre') {
+            } else {
                 if ($profesor->getEmail() != $valor) {
                     $profesor->setEmail($valor);
                     $em->persist($profesor);
                     $em->flush();
                 }
             }
-            return new Response($valor);
-                
+            return new Response($valor);                
         }
     }
 }
