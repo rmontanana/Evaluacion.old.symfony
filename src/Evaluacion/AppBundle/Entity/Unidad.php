@@ -63,7 +63,7 @@ class Unidad
     
     /**
      * 
-     * @ORM\OneToMany(targetEntity="Evaluacion\AppBundle\Entity\Indicador" mappedBy="unidad") 
+     * @ORM\OneToMany(targetEntity="Evaluacion\AppBundle\Entity\Indicador", mappedBy="unidad") 
      */
     private $indicadores;
 

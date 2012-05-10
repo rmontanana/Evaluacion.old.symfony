@@ -66,10 +66,6 @@ class MateriaRepository extends EntityRepository
                 ORDER BY u.id" ;
         $consulta = $em->createQuery($dql);
         $consulta->setParameter('materia', $materia);
-        /* $consulta->setParameter('competencia', $competencia);
-         * AND
-                        i.competencia is null or i.competencia = :competencia
-         */
         $unidades = $consulta->getResult();
         return $unidades;
     }
