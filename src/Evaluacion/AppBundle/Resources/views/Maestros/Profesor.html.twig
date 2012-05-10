@@ -1,0 +1,45 @@
+{# AppBundle/Maestros/Profesor.html.twig #}
+
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block titulo %}{{ titulo }}{% endblock %} 
+
+{% block centro %}{{ centro }}{% endblock %}
+
+{% block usuario %}{{ usuario }}<a href="#">{{ enlaceUsuario }}</a>{% endblock %}
+
+{% block menu %}
+    {% include 'AppBundle::menu.html.twig' %}
+{% endblock %}
+
+{% block cuerpo %}
+{# Cabecera con los datos #}
+<table class="table table-bordered">
+    <tr>
+        <th><h2>Nombre</th>
+        <th><h2>Email</th>
+    </tr>
+    {% for profesor in profesores %}
+        <tr>
+            <td id="nombre.{{profesor.id}}" class="dblclick" ncampo="nombre">{{profesor.nombre}}</td>
+            <td id="email.{{profesor.id}}" class="dblclick" ncampo="email">{{profesor.email}}</td>
+        </tr> 
+    {% endfor %}
+</table>
+
+<script type="text/javascript">
+/* La función que se encarga de permitir la edición en línea del Nombre del Profesor y el email */
+window.onload = function() {
+  $(".dblclick").editable("{{ path("ajax_editarProfesor") }}", { 
+      indicator : "<img src='{{ asset('bundles/app/img/loading.gif') }}'>",
+      method    : "POST",
+      tooltip   : "doble-click para editar...",
+      submitdata: function(value) { return { "anterior": value }; },
+      event     : "dblclick",
+      style  : "inherit"
+  });
+};
+</script>
+{% endblock %}
+
+
