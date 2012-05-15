@@ -30,17 +30,17 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Event\DataEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Evaluacion\AppBundle\Util\Util;
-use Evaluacion\AppBundle\Entity\Profesor;
+use Evaluacion\AppBundle\Entity\Alumno;
 
 
 /**
- * @Route("/prof") 
+ * @Route("/alum") 
  */
-class ProfesorController extends Controller
+class AlumnoController extends Controller
 {
     /**
-     * Vamos a hacer un listado de los profesores
-     * @Route("/list", name="list_prof")
+     * Vamos a hacer un listado de los alumnos
+     * @Route("/list", name="list_alum")
      * @return string 
      */
     public function AsignacionAction()
@@ -49,18 +49,19 @@ class ProfesorController extends Controller
         $menu = Util::getMenu();
         $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
         $centro = "I.E.S.O. Pascual Serrano";
-        $profesores = $em->getRepository('AppBundle:Profesor')->findAll();
-        $param = array('titulo' => 'Profesores', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'profesores' => $profesores);
-        return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
+        $alumnos = $em->getRepository('AppBundle:Alumno')->findAll();
+        $grupos = $em->getRepository('AppBundle:Grupo')->findAll();
+        $param = array('titulo' => 'Alumnos', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'alumnos' => $alumnos, 'grupos' => $grupos );
+        return $this->render('AppBundle:Maestros:Alumno.html.twig', $param);
     }
     
     /**
-     * Vamos a hacer un listado de los profesores
-     * @Route("/modProfesor", name="ajax_editarProfesor")
+     * Vamos a hacer un listado de los alumnos
+     * @Route("/modAlumno", name="ajax_editarAlumno")
      * @return string 
      */
-    public function ajaxEditarProfesor()
+    public function ajaxEditarAlumno()
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $valor = $this->getRequest()->get('value');
@@ -73,20 +74,37 @@ class ProfesorController extends Controller
             // Separamos el campo del identificador.
             list($campo, $clave) = explode(".", $this->getRequest()->get('id'));
             $em = $this->getDoctrine()->getEntityManager();
-            $profesor = $em->getRepository('AppBundle:Profesor')
+            $alumno = $em->getRepository('AppBundle:Alumno')
                             ->find($clave);
             if ($campo == 'nombre') {
-                if ($profesor->getNombre() != $valor) {
-                    $profesor->setNombre($valor);
-                    $em->persist($profesor);
+                if ($alumno->getNombre() != $valor) {
+                    $alumno->setNombre($valor);
+                    $em->persist($alumno);
                     $em->flush();
                 }
-            } else {
-                if ($profesor->getEmail() != $valor) {
-                    $profesor->setEmail($valor);
-                    $em->persist($profesor);
+            } 
+            elseif ($campo == 'apellidos') {
+                if ($alumno->getApellidos() != $valor) {
+                    $alumno->setApellidos($valor);
+                    $em->persist($alumno);
                     $em->flush();
                 }
+            }
+            elseif ($campo == 'email') {
+                if ($alumno->getEmail() != $valor) {
+                    $alumno->setEmail($valor);
+                    $em->persist($alumno);
+                    $em->flush();
+                }
+            }
+            else {
+                if ($alumno->getGrupo()->getId() != $valor) {
+                    $grupo = $em->getRepository("AppBundle:Grupo")->find($valor);
+                    $alumno->setGrupo($grupo);
+                    $em->persist($alumno);
+                    $em->flush();
+                }
+                return new Response($grupo);    
             }
             return new Response($valor);                
         }

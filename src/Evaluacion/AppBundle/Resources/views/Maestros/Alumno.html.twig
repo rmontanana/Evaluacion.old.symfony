@@ -1,0 +1,63 @@
+{# AppBundle/Maestros/Alumno.html.twig #}
+
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block titulo %}{{ titulo }}{% endblock %} 
+
+{% block centro %}{{ centro }}{% endblock %}
+
+{% block usuario %}{{ usuario }}<a href="#">{{ enlaceUsuario }}</a>{% endblock %}
+
+{% block menu %}
+    {% include 'AppBundle::menu.html.twig' %}
+{% endblock %}
+
+{% block cuerpo %}
+{# Cabecera con los datos #}
+<table class="table table-bordered">
+    <tr>
+        <th><h2>Nombre</th>
+        <th><h2>Apellidos</th>
+        <th><h2>Email</th>
+        <th><h2>Grupo</th>
+    </tr>
+    {% for alumno in alumnos %}
+        <tr>
+            <td id="nombre.{{alumno.id}}" class="dblclick">{{alumno.nombre}}</td>
+            <td id="apellidos.{{alumno.id}}" class="dblclick">{{alumno.apellidos}}</td>
+            <td id="email.{{alumno.id}}" class="dblclick" >{{alumno.email}}</td>
+            <td id="grupo.{{alumno.id}}" class="editable_select" >{{alumno.grupo}}</td>
+        </tr> 
+    {% endfor %}
+</table>
+
+<script type="text/javascript">
+/* La función que se encarga de permitir la edición en línea del Nombre, Apellidos, Email y Grupo del Alumno */
+window.onload = function() {
+  $(".dblclick").editable("{{ path("ajax_editarAlumno") }}", { 
+      indicator : "<img src='{{ asset('bundles/app/img/loading.gif') }}'>",
+      method    : "POST",
+      tooltip   : "doble-click para editar...",
+      submitdata: function(value) { return { "anterior": value }; },
+      event     : "dblclick",
+      style  : "inherit"
+  });
+/*"{'Primero A':'Primero A','Segundo A':'Segundo A','Tercero A':'Tercero A',}",*/
+  $(".editable_select").editable("{{ path("ajax_editarAlumno") }}", { 
+    indicator : "<img src='{{ asset('bundles/app/img/loading.gif') }}'>",
+    method    : "POST",
+    tooltip   : "doble-click para editar...",
+    data   :  "{ {% for grupo in grupos %} '{{grupo.id}}':'{{grupo.descripcion}}',{% endfor %} }",
+    type   : "select",
+    submit    : "Ok",
+    cancel    : "Cancelar",
+    submitdata : function(value) { return { "anterior": value }; },
+    event     : "dblclick",
+    style  : "inherit"
+  });
+};
+</script>
+{% endblock %}
+
+
+
