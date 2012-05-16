@@ -104,7 +104,7 @@ class AlumnoController extends Controller
                     $em->persist($alumno);
                     $em->flush();
                 }
-                return new Response($grupo);    
+                return new Response($alumno->getGrupo()->getDescripcion());    
             }
             return new Response($valor);                
         }
