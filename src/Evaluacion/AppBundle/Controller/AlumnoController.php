@@ -38,12 +38,13 @@ use Evaluacion\AppBundle\Entity\Alumno;
  */
 class AlumnoController extends Controller
 {
+    
     /**
      * Vamos a hacer un listado de los alumnos
      * @Route("/list", name="list_alum")
      * @return string 
      */
-    public function AsignacionAction()
+    public function MostrarAlumnos()
     {
         $em = $this->getDoctrine()->getEntityManager();
         $menu = Util::getMenu();
@@ -51,9 +52,64 @@ class AlumnoController extends Controller
         $centro = "I.E.S.O. Pascual Serrano";
         $alumnos = $em->getRepository('AppBundle:Alumno')->findAll();
         $grupos = $em->getRepository('AppBundle:Grupo')->findAll();
-        $param = array('titulo' => 'Alumnos', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'alumnos' => $alumnos, 'grupos' => $grupos );
+        $param = array('titulo' => 'Alumnos', 'menu' => $menu, 'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'alumnos' => $alumnos, 'grupos' => $grupos);
         return $this->render('AppBundle:Maestros:Alumno.html.twig', $param);
+    }
+    
+    /**
+     * Vamos a hacer una alta de un alumno
+     * @Route("/alta", name="alta_alum")
+     * @return string 
+     */
+    public function AltaAlumno()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $menu = Util::getMenu();
+        $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
+        $centro = "I.E.S.O. Pascual Serrano";
+        $alumnos = $em->getRepository('AppBundle:Alumno')->findAll();
+        $grupos = $em->getRepository('AppBundle:Grupo')->findAll();
+        $form = $this->creaFormulario();
+        $param = array('titulo' => 'AltaAlumnos', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'alumnos' => $alumnos, 'grupos' => $grupos, 'form' => $form->createView() );
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            $datos = $form->getData();
+            $alumno = new Alumno();           
+            $alumno->setNombre($datos['nombre']);
+            $alumno->setApellidos($datos['apellidos']);
+            $alumno->setEmail($datos['email']);
+            $alumno->setGrupo($datos['grupo']);
+            $em->persist($alumno);
+            $em->flush();
+            $param = array('titulo' => 'Alumnos', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'alumnos' => $alumnos, 'grupos' => $grupos);
+            return $this->render('AppBundle:Maestros:Alumno.html.twig', $param);
+        }
+        return $this->render('AppBundle:Maestros:AltaAlumno.html.twig', $param);
+    }
+    
+        /**
+     * Crea el formulario para añadir un nuevo alumno
+     * @return formulario 
+     */
+    private function creaFormulario()
+    {    
+        $factory = $this->get('form.factory');
+        $builder=$this->createFormBuilder();
+        $form = $builder
+        ->add('nombre', 'text')
+        ->add('apellidos', 'text')
+        ->add('email', 'email')
+        ->add('grupo', 'entity', array('class' => 'AppBundle:Grupo',
+            'query_builder' => function (EntityRepository $er) {
+                               $qb = $er->createQueryBuilder('c')->orderBy('c.descripcion','ASC');
+                               return $qb;
+                               }))
+        ->getForm();
+        return $form;
     }
     
     /**

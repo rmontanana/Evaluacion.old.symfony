@@ -43,16 +43,66 @@ class ProfesorController extends Controller
      * @Route("/list", name="list_prof")
      * @return string 
      */
-    public function AsignacionAction()
+    public function MostrarProfesores()
     {
         $em = $this->getDoctrine()->getEntityManager();
         $menu = Util::getMenu();
         $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
         $centro = "I.E.S.O. Pascual Serrano";
         $profesores = $em->getRepository('AppBundle:Profesor')->findAll();
-        $param = array('titulo' => 'Profesores', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+        $param = array('titulo' => 'Profesores', 'menu' => $menu, 'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
                        'profesores' => $profesores);
         return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
+    }
+    
+        /**
+     * Vamos a hacer una alta de un profesor
+     * @Route("/alta", name="alta_prof")
+     * @return string 
+     */
+    public function AltaProfesor()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $menu = Util::getMenu();
+        $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
+        $centro = "I.E.S.O. Pascual Serrano";
+        $profesores = $em->getRepository('AppBundle:Profesor')->findAll();
+        $form = $this->creaFormulario();
+        $param = array('titulo' => 'AltaProfesores', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'profesores' => $profesores, 'form' => $form->createView() );
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            $datos = $form->getData();
+            $profesor = new Profesor();           
+            $profesor->setNombre($datos['nombre']);
+            $profesor->setEmail($datos['email']);
+            $profesor->setUsuario($datos['usuario']);
+            $profesor->setPassword($datos['password']);
+            $em->persist($profesor);
+            $em->flush();
+            $param = array('titulo' => 'Profesores', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'profesores' => $profesores);
+            return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
+        }
+        return $this->render('AppBundle:Maestros:AltaProfesor.html.twig', $param);
+    }
+    
+        /**
+     * Crea el formulario para añadir un nuevo profesor
+     * @return formulario 
+     */
+    private function creaFormulario()
+    {    
+        $factory = $this->get('form.factory');
+        $builder=$this->createFormBuilder();
+        $form = $builder
+        ->add('nombre', 'text')
+        ->add('email', 'email')
+        ->add('usuario', 'text')
+        ->add('password', 'text')
+        ->getForm();
+        return $form;
     }
     
     /**

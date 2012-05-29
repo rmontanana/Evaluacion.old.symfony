@@ -1,0 +1,24 @@
+{# AppBundle/Maestros/AltaProfesor.html.twig #}
+
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block titulo %}{{ titulo }}{% endblock %} 
+
+{% block centro %}{{ centro }}{% endblock %}
+
+{% block usuario %}{{ usuario }}<a href="#">{{ enlaceUsuario }}</a>{% endblock %}
+
+{% block menu %}
+    {% include 'AppBundle::menu.html.twig' %}
+{% endblock %}
+
+{% block cuerpo %}
+{# Cabecera con los datos #}
+<form action="{{ path('alta_prof') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input type="submit" />
+</form>
+{% endblock %}
+
+
+
