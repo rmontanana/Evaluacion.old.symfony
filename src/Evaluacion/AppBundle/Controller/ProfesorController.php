@@ -74,11 +74,14 @@ class ProfesorController extends Controller
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
             $datos = $form->getData();
-            $profesor = new Profesor();           
+            $profesor = new Profesor();     
+            $profesor->setSalt(md5(time() + rand(100, 10000)));
+            $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
             $profesor->setNombre($datos['nombre']);
             $profesor->setEmail($datos['email']);
             $profesor->setUsuario($datos['usuario']);
-            $profesor->setPassword($datos['password']);
+            $profesor->setPassword($encoder->encodePassword($datos['password'], $profesor->getSalt()));
+            $profesor->setRol('ROL_USER');
             $em->persist($profesor);
             $em->flush();
             $param = array('titulo' => 'Profesores', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
@@ -100,7 +103,10 @@ class ProfesorController extends Controller
         ->add('nombre', 'text')
         ->add('email', 'email')
         ->add('usuario', 'text')
-        ->add('password', 'text')
+        ->add('password', 'repeated', array(
+        'type' => 'password',
+        'invalid_message' => 'Las dos contraseñas deben coincidir',
+        'options' => array('label' => 'Contraseña')))
         ->getForm();
         return $form;
     }
