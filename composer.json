@@ -1,0 +1,27 @@
+{
+"name": "rmontanana/Evaluacion",
+"description": "Aplicación de prueba para aprender a programar con Symfony 2.1",
+"autoload": {
+    "psr-0": { "": "src/" }
+},
+"require": {
+    "symfony/framework-standard-edition": "2.1.*",
+    "doctrine/doctrine-fixtures-bundle": "dev-master",
+    "ideup/simple-paginator-bundle": "dev-master"
+},
+"scripts": {
+    "post-install-cmd": [
+       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+    ],
+    "post-update-cmd": [
+       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+    ]
+},
+"minimum-stability": "dev"
+}
