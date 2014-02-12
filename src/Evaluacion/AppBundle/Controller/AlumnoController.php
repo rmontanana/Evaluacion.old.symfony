@@ -30,69 +30,69 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Event\DataEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Evaluacion\AppBundle\Util\Util;
-use Evaluacion\AppBundle\Entity\Profesor;
+use Evaluacion\AppBundle\Entity\Alumno;
 
 
 /**
- * @Route("/prof") 
+ * @Route("/alum") 
  */
-class ProfesorController extends Controller
+class AlumnoController extends Controller
 {
+    
     /**
-     * Vamos a hacer un listado de los profesores
-     * @Route("/list", name="list_prof")
+     * Vamos a hacer un listado de los alumnos
+     * @Route("/list", name="list_alum")
      * @return string 
      */
-    public function MostrarProfesores()
+    public function MostrarAlumnos()
     {
         $em = $this->getDoctrine()->getEntityManager();
         $menu = Util::getMenu();
         $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
         $centro = "I.E.S.O. Pascual Serrano";
-        $profesores = $em->getRepository('AppBundle:Profesor')->findAll();
-        $param = array('titulo' => 'Profesores', 'menu' => $menu, 'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'profesores' => $profesores);
-        return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
+        $alumnos = $em->getRepository('AppBundle:Alumno')->findAll();
+        $grupos = $em->getRepository('AppBundle:Grupo')->findAll();
+        $param = array('titulo' => 'Alumnos', 'menu' => $menu, 'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'alumnos' => $alumnos, 'grupos' => $grupos);
+        return $this->render('AppBundle:Maestros:Alumno.html.twig', $param);
     }
     
-        /**
-     * Vamos a hacer una alta de un profesor
-     * @Route("/alta", name="alta_prof")
+    /**
+     * Vamos a hacer una alta de un alumno
+     * @Route("/alta", name="alta_alum")
      * @return string 
      */
-    public function AltaProfesor()
+    public function AltaAlumno()
     {
         $em = $this->getDoctrine()->getEntityManager();
         $menu = Util::getMenu();
         $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
         $centro = "I.E.S.O. Pascual Serrano";
-        $profesores = $em->getRepository('AppBundle:Profesor')->findAll();
+        $alumnos = $em->getRepository('AppBundle:Alumno')->findAll();
+        $grupos = $em->getRepository('AppBundle:Grupo')->findAll();
         $form = $this->creaFormulario();
-        $param = array('titulo' => 'AltaProfesores', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'profesores' => $profesores, 'form' => $form->createView() );
+        $param = array('titulo' => 'AltaAlumnos', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'alumnos' => $alumnos, 'grupos' => $grupos, 'form' => $form->createView() );
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
             $datos = $form->getData();
-            $profesor = new Profesor();     
-            $profesor->setSalt(md5(time() + rand(100, 10000)));
-            $encoder = $this->container->get('security.encoder_factory')->getEncoder($profesor);
-            $profesor->setNombre($datos['nombre']);
-            $profesor->setEmail($datos['email']);
-            $profesor->setUsuario($datos['usuario']);
-            $profesor->setPassword($encoder->encodePassword($datos['password'], $profesor->getSalt()));
-            $profesor->setRol('ROL_USER');
-            $em->persist($profesor);
+            $alumno = new Alumno();           
+            $alumno->setNombre($datos['nombre']);
+            $alumno->setApellidos($datos['apellidos']);
+            $alumno->setEmail($datos['email']);
+            $alumno->setGrupo($datos['grupo']);
+            $em->persist($alumno);
             $em->flush();
-            $param = array('titulo' => 'Profesores', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
-                       'profesores' => $profesores);
-            return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
+            $param = array('titulo' => 'Alumnos', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+                       'alumnos' => $alumnos, 'grupos' => $grupos);
+            return $this->render('AppBundle:Maestros:Alumno.html.twig', $param);
         }
-        return $this->render('AppBundle:Maestros:AltaProfesor.html.twig', $param);
+        return $this->render('AppBundle:Maestros:AltaAlumno.html.twig', $param);
     }
     
         /**
-     * Crea el formulario para añadir un nuevo profesor
+     * Crea el formulario para añadir un nuevo alumno
      * @return formulario 
      */
     private function creaFormulario()
@@ -101,22 +101,23 @@ class ProfesorController extends Controller
         $builder=$this->createFormBuilder();
         $form = $builder
         ->add('nombre', 'text')
+        ->add('apellidos', 'text')
         ->add('email', 'email')
-        ->add('usuario', 'text')
-        ->add('password', 'repeated', array(
-        'type' => 'password',
-        'invalid_message' => 'Las dos contraseñas deben coincidir',
-        'options' => array('label' => 'Contraseña')))
+        ->add('grupo', 'entity', array('class' => 'AppBundle:Grupo',
+            'query_builder' => function (EntityRepository $er) {
+                               $qb = $er->createQueryBuilder('c')->orderBy('c.descripcion','ASC');
+                               return $qb;
+                               }))
         ->getForm();
         return $form;
     }
     
     /**
-     * Vamos a hacer un listado de los profesores
-     * @Route("/modProfesor", name="ajax_editarProfesor")
+     * Vamos a hacer un listado de los alumnos
+     * @Route("/modAlumno", name="ajax_editarAlumno")
      * @return string 
      */
-    public function ajaxEditarProfesor()
+    public function ajaxEditarAlumno()
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $valor = $this->getRequest()->get('value');
@@ -129,20 +130,37 @@ class ProfesorController extends Controller
             // Separamos el campo del identificador.
             list($campo, $clave) = explode(".", $this->getRequest()->get('id'));
             $em = $this->getDoctrine()->getEntityManager();
-            $profesor = $em->getRepository('AppBundle:Profesor')
+            $alumno = $em->getRepository('AppBundle:Alumno')
                             ->find($clave);
             if ($campo == 'nombre') {
-                if ($profesor->getNombre() != $valor) {
-                    $profesor->setNombre($valor);
-                    $em->persist($profesor);
+                if ($alumno->getNombre() != $valor) {
+                    $alumno->setNombre($valor);
+                    $em->persist($alumno);
                     $em->flush();
                 }
-            } else {
-                if ($profesor->getEmail() != $valor) {
-                    $profesor->setEmail($valor);
-                    $em->persist($profesor);
+            } 
+            elseif ($campo == 'apellidos') {
+                if ($alumno->getApellidos() != $valor) {
+                    $alumno->setApellidos($valor);
+                    $em->persist($alumno);
                     $em->flush();
                 }
+            }
+            elseif ($campo == 'email') {
+                if ($alumno->getEmail() != $valor) {
+                    $alumno->setEmail($valor);
+                    $em->persist($alumno);
+                    $em->flush();
+                }
+            }
+            else {
+                if ($alumno->getGrupo()->getId() != $valor) {
+                    $grupo = $em->getRepository("AppBundle:Grupo")->find($valor);
+                    $alumno->setGrupo($grupo);
+                    $em->persist($alumno);
+                    $em->flush();
+                }
+                return new Response($alumno->getGrupo()->getDescripcion());    
             }
             return new Response($valor);                
         }
