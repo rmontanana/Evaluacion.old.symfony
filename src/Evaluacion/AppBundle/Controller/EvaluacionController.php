@@ -29,6 +29,9 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Event\DataEvent;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Evaluacion\AppBundle\Util\Util;
 use Evaluacion\AppBundle\Entity\Competencia;
 use Evaluacion\AppBundle\Entity\Unidad;
@@ -46,7 +49,7 @@ class EvaluacionController extends Controller
      * @Route("/asig", name="eval_asig")
      * @return string 
      */
-    public function AsignacionAction()
+    public function AsignacionAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $menu = Util::getMenu();
@@ -56,18 +59,19 @@ class EvaluacionController extends Controller
         
         $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
                        'form' => $form->createView());
-        $request = $this->getRequest();
-        if ($request->getMethod() == 'POST') {
-            $form->bindRequest($request);
+        //$request = $this->getRequest();
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
             $datos = $form->getData();
+            $datos['Materia'] = $request->request->get('form')['Materia'];
             //$this->container->get('logger')->debug("datos = ".print_r($datos));
             //Arregla el dato que viene de la materia.
+            //var_dump($datos);
             $datos['Materia'] = explode('=>', $datos['Materia']);
             //$this->container->get('logger')->debug("id materia=".$datos['Materia'][0]);
             //Obtiene todos los indicadores de la materia correspondiente.
             // TODO Crear un Repositorio para Materias que permita hacer esta consulta.
-            $codMateria = $datos['Materia'][0];
-            $materia = $em->getRepository('AppBundle:Materia')->find($codMateria);
+            $materia = $em->getRepository('AppBundle:Materia')->find($datos['Materia'][0]);
             $unidades = $em->getRepository('AppBundle:Materia')->findUnidadesByMateria($materia);
             //$this->container->get('logger')->debug("unidades = ".print_r($unidades));
             //$this->container->get('logger')->debug("datos = ".print_r($indicadores));
@@ -86,7 +90,7 @@ class EvaluacionController extends Controller
     private function creaFormulario()
     {       
         $factory = $this->get('form.factory');
-        $builder=$this->createFormBuilder();
+        /*$builder=$this->createBuilder();
         $form = $builder
             ->add('Nivel', 'entity', array('class' => 'AppBundle:Nivel', 'empty_value' => 'Selecciona Nivel',
                                            'attr'=> array("onchange" => "rellenaMateria(this.value);")))
@@ -96,7 +100,16 @@ class EvaluacionController extends Controller
                                                                     $qb = $er->createQueryBuilder('c')->orderBy('c.descripcion','ASC');
                                                                     return $qb;
                                                                     }))
-            ->getForm();
+            ->getForm();*/
+        $form = $factory->create('form');
+        $form->add('Nivel', 'entity', array('class' => 'AppBundle:Nivel', 'empty_value' => 'Selecciona Nivel',
+                                            'attr'=> array("onchange" => "rellenaMateria(this.value);")))
+             ->add('Materia', 'choice', array('empty_value' => 'Selecciona Materia'))
+             ->add('Evaluacion', 'entity', array('class' => 'AppBundle:Evaluacion',
+                                                 'query_builder' => function (EntityRepository $er) {
+                                                                    $qb = $er->createQueryBuilder('c')->orderBy('c.descripcion','ASC');
+                                                                    return $qb;
+                                                                    }));
         return $form;
     }
     
