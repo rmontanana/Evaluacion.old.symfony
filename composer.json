@@ -6,7 +6,7 @@
     "psr-0": { "": "src/" }
 },
 "require": {
-    "symfony/framework-standard-edition": "2.1.*",
+    "symfony/framework-standard-edition": "2.3.*",
     "doctrine/doctrine-fixtures-bundle": "dev-master",
     "ideup/simple-paginator-bundle": "dev-master"
 },

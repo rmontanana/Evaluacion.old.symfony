@@ -21,8 +21,13 @@
     </tr>
     {% for profesor in profesores %}
         <tr>
+<<<<<<< HEAD
+            <td id="nombre.{{profesor.id}}" class="dblclick" >{{profesor.nombre}}</td>
+            <td id="email.{{profesor.id}}" class="dblclick" >{{profesor.email}}</td>
+=======
             <td id="nombre.{{profesor.id}}" class="dblclick" ncampo="nombre">{{profesor.nombre}}</td>
             <td id="email.{{profesor.id}}" class="dblclick" ncampo="email">{{profesor.email}}</td>
+>>>>>>> master
         </tr> 
     {% endfor %}
 </table>
