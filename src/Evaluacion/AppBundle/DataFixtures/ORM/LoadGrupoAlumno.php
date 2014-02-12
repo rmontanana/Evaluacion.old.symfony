@@ -27,7 +27,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Evaluacion\AppBundle\Entity\Grupo;
 use Evaluacion\AppBundle\Entity\Alumno;
-
+use Evaluacion\AppBundle\Util\Util;
 
 class LoadGrupoAlumno implements FixtureInterface, OrderedFixtureInterface
 {
@@ -46,7 +46,7 @@ class LoadGrupoAlumno implements FixtureInterface, OrderedFixtureInterface
                 $alumno = new Alumno();
                 $alumno->setNombre($nombre);
                 $alumno->setApellidos($apellido);
-                $alumno->setEmail(strtolower($apellido).'@gmail.com');
+                $alumno->setEmail(Util::getSlug($apellido).'@gmail.com');
                 $alumno->setGrupo($grupo);
                 $manager->persist($alumno);
             }

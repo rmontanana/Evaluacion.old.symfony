@@ -43,18 +43,27 @@ class ProfesorController extends Controller
      * @Route("/list", name="list_prof")
      * @return string 
      */
+<<<<<<< HEAD
     public function MostrarProfesores()
+=======
+    public function AsignacionAction()
+>>>>>>> master
     {
         $em = $this->getDoctrine()->getEntityManager();
         $menu = Util::getMenu();
         $usuario = "Ricardo Montanana Gomez"; $enlace="(salir)";
         $centro = "I.E.S.O. Pascual Serrano";
         $profesores = $em->getRepository('AppBundle:Profesor')->findAll();
+<<<<<<< HEAD
         $param = array('titulo' => 'Profesores', 'menu' => $menu, 'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+=======
+        $param = array('titulo' => 'Asignación', 'menu' => $menu,'usuario' => $usuario, 'enlaceUsuario' => $enlace, 'centro' =>$centro,
+>>>>>>> master
                        'profesores' => $profesores);
         return $this->render('AppBundle:Maestros:Profesor.html.twig', $param);
     }
     
+<<<<<<< HEAD
         /**
      * Vamos a hacer una alta de un profesor
      * @Route("/alta", name="alta_prof")
@@ -114,6 +123,11 @@ class ProfesorController extends Controller
     /**
      * Vamos a hacer un listado de los profesores
      * @Route("/modProfesor", name="ajax_editarProfesor")
+=======
+    /**
+     * Vamos a hacer un listado de los profesores
+     * @Route("/modNombre", name="ajax_editarProfesor")
+>>>>>>> master
      * @return string 
      */
     public function ajaxEditarProfesor()

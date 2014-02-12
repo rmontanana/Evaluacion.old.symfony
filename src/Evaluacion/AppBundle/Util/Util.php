@@ -1,5 +1,6 @@
 <?php
-/* ***************************************************************************
+
+/* * **************************************************************************
  * AppBundle/Util/Util.php
  * Clase Util donde realizan diversas acciones
  * (C) Copyright 2012 Ricardo Montañana <rmontanana@gmail.com>
@@ -16,31 +17,37 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Evaluacion (LICENSE file). 
+ * along with Evaluacion (LICENSE file).
  * If not, see <http://www.gnu.org/licenses/>
  * ***************************************************************************
- */   
-
+ */
 
 namespace Evaluacion\AppBundle\Util;
 
 use Symfony\Component\Yaml\Parser;
 
+Class Util {
 
-Class Util
-{
     /**
      * Devuelve el menú de la aplicación
      * @return string
      */
-    static public function getMenu()
-    {
+    static public function getMenu() {
         // Carga el fichero de configuración donde reside el menú
-        $configuracion = __DIR__ ."/../Resources/config/menu.yml";
+        $configuracion = __DIR__ . "/../Resources/config/menu.yml";
         $yaml = new Parser();
         // Llama al parser de symfony para que devuelva un array con el menú
         $menu = $yaml->parse(file_get_contents($configuracion));
         return $menu;
+    }
+
+    static public function getSlug($cadena, $separador = '-') {
+        // Código copiado de http://cubiq.org/the-perfect-php-clean-url-generator
+        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $cadena);
+        $slug = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $slug);
+        $slug = strtolower(trim($slug, $separador));
+        $slug = preg_replace("/[\/_|+ -]+/", $separador, $slug);
+        return $slug;
     }
 }
 

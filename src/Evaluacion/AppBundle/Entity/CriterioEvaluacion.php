@@ -45,7 +45,7 @@ class CriterioEvaluacion
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="string", length=255)
+     * @ORM\Column(name="descripcion", type="string", length=1024)
      * @Assert\NotNull(message = "La descripción no puede estar vacía")
      */
     private $descripcion;
@@ -53,7 +53,7 @@ class CriterioEvaluacion
     /**
      * @var string $explicacion
      * 
-     * @ORM\Column(name="explicacion", type="string", length=255)
+     * @ORM\Column(name="explicacion", type="string", length=4096)
      */
     private $explicacion;
     
